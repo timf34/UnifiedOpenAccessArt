@@ -2,6 +2,8 @@
 
 Aggregating Open Access datasets from the world's top art museums into a unified repository.
 
+I encourage you to build something cool with this data! And if you do, please let me know, I'd love to see it!
+
 ## Museums Datasets Downloaded 
 
 [x] mark if they're processed 
