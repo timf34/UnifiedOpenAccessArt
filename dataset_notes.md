@@ -45,3 +45,13 @@
 ### [Minneapolis Institute of Art](https://github.com/artsmia/collection)
 
 - Type: JSON, but spread across lots of files
+
+### [The Metropolitan Museum of Art](https://github.com/metmuseum/openaccess/tree/master)
+
+- Type: CSV
+- Object URLS: True
+- Image URLS: 
+- Notes:
+    - _Doesn't include image URLs in the dataset..._ I'm sure I can find a way to get them (legally lol), just move on 
+    for now and come back later! Get the 90% solution first!
+    - Note: there's an API: https://metmuseum.github.io/

@@ -2,11 +2,24 @@
 
 Aggregating Open Access datasets from the world's top art museums into a unified repository.
 
-## Museums Datasets Included
+## Museums Datasets Downloaded 
 
-- [ ] The Metropolitan Museum of Art
+[x] mark if they're processed 
+
+- [ ] [The Metropolitan Museum of Art](https://github.com/metmuseum/openaccess/tree/master)
 - [ ] [The MOMA](https://github.com/MuseumofModernArt/collection)
 - [ ] [National Gallery of Ireland](https://data.gov.ie/dataset/national-gallery-of-ireland-creative-commons-list/resource/b772728f-44bf-4913-a36f-743615d0523c)
+- [ ] [Cleveland Museum of Art](https://github.com/ClevelandMuseumArt/openaccess)
+- [ ] [The National Gallery of Art (DC)](https://github.com/NationalGalleryOfArt/opendata)
+- [ ] [Tate Gallery](https://github.com/tategallery/collection)
+
+
+## Museum Datasets To Download
+
+- [ ] [Art Institute of Chicago](https://github.com/art-institute-of-chicago/api-data/tree/master?tab=readme-ov-file)
+- [ ] [Harvard Art Museum](https://harvardartmuseums.org/collections/api)
+- [ ] [Minneapolis Institute of Art](https://github.com/artsmia/collection)
+- [ ] [Cooper Hewitt, Smithsonian Design Museum](https://github.com/cooperhewitt/collection)
 
 ## License
 
