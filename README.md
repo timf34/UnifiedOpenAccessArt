@@ -5,7 +5,8 @@ Aggregating Open Access datasets from the world's top art museums into a unified
 ## Museums Datasets Included
 
 - [ ] The Metropolitan Museum of Art
-- [ ] The MOMA
+- [ ] [The MOMA](https://github.com/MuseumofModernArt/collection)
+- [ ] [National Gallery of Ireland](https://data.gov.ie/dataset/national-gallery-of-ireland-creative-commons-list/resource/b772728f-44bf-4913-a36f-743615d0523c)
 
 ## License
 
