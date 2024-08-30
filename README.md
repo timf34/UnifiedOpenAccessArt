@@ -2,6 +2,10 @@
 
 Aggregating Open Access datasets from the world's top art museums into a unified repository.
 
+## Museums Datasets Included
+
+- [ ] The Metropolitan Museum of Art
+- [ ] The MOMA
 
 ## License
 
