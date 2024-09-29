@@ -1,0 +1,43 @@
+museums:
+  - name: Carnegie Museum of Art
+    location: Pittsburgh, PA
+    data_formats: [csv, json]
+    url: https://collectionsasdata.github.io/facet2/
+    github: https://github.com/cmoa/collection
+    dataset_download_link:
+      - https://raw.githubusercontent.com/cmoa/collection/refs/heads/master/cmoa.csv
+      - https://raw.githubusercontent.com/cmoa/collection/refs/heads/master/cmoa.json
+    local_filename: cmoa.csv
+    notes: "Anoter good link is the following for searching the collection: https://collection.carnegieart.org/"
+
+  - name: The Metropolitan Museum of Art
+    location: New York, NY
+    data_formats: [csv]
+    url: https://www.metmuseum.org/art/collection
+    github: https://github.com/metmuseum/openaccess
+    dataset_download_link:
+      - https://github.com/metmuseum/openaccess/raw/refs/heads/master/MetObjects.csv
+
+  - name: Museum of Modern Art (MoMA)
+    location: New York, NY
+    data_formats: [json, csv, json-ld, api]
+    url: https://www.moma.org/data/
+    github: https://github.com/MuseumOfModernArt/collection
+    notes: "API available for querying collections"
+
+  - name: Tate Gallery
+    location: London, UK
+    data_formats: [csv, images]
+    url: https://www.tate.org.uk/about-us/digital/collection-data
+
+  - name: Rijksmuseum
+    location: Amsterdam, Netherlands
+    data_formats: [json, api, images]
+    url: https://www.rijksmuseum.nl/en/api
+    notes: "Free API access for collections and high-quality images"
+
+  - name: Smithsonian Institution
+    location: Washington, D.C., USA
+    data_formats: [csv, api, images, json]
+    url: https://www.si.edu/openaccess
+    notes: "Smith
