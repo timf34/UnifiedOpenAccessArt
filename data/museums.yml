@@ -1,4 +1,18 @@
 museums:
+  - name: Art Institute of Chicago
+    location: Chicago, IL
+    data_formats: [api]
+    url: https://api.artic.edu/docs/
+    github: https://github.com/art-institute-of-chicago/data-aggregator
+    notes: "https://www.artic.edu/open-access"
+
+  - name: Brooklyn Museum
+    location: Brooklyn, NY
+    data_formats: [api]
+    url: https://www.brooklynmuseum.org/opencollection/api
+    github: https://github.com/brooklynmuseum
+    notes: "Need to apply for an API key"
+
   - name: Carnegie Museum of Art
     location: Pittsburgh, PA
     data_formats: [csv, json]
@@ -8,36 +22,149 @@ museums:
       - https://raw.githubusercontent.com/cmoa/collection/refs/heads/master/cmoa.csv
       - https://raw.githubusercontent.com/cmoa/collection/refs/heads/master/cmoa.json
     local_filename: cmoa.csv
-    notes: "Anoter good link is the following for searching the collection: https://collection.carnegieart.org/"
+    notes: "Another good link is the following for searching the collection: https://collection.carnegieart.org/"
+
+  - name: Cleveland Museum of Art
+    location: Cleveland, OH
+    data_formats: [csv, json, api]
+    url: https://openaccess-api.clevelandart.org/
+    github: https://github.com/ClevelandMuseumArt/openaccess
+    notes: "https://www.clevelandart.org/open-access"
+
+  - name: Cooper Hewitt, Smithsonian Design Museum
+    location: New York, NY
+    data_formats: [csv, json, api]
+    url: https://www.cooperhewitt.org/open-source-at-cooper-hewitt/
+    github: https://github.com/cooperhewitt/collection
+    notes: "I don't see a single JSON or .csv file to download, although website says they have it"
+
+  - name: Digitalt Museum # An aggregator, interesting to look at
+    location: Norway, Sweden
+    data_formats: [api, images]
+    url: https://digitaltmuseum.org/
+    github: https://github.com/NordicMuseum/DiMu-API-documentation
+
+  - name: Europeana  # Another aggregator
+    location: Netherlands, Europe-wide
+    data_formats: [json, api, xml, images]
+    url: https://pro.europeana.eu/resources/apis
+    github: https://github.com/europeana/europeana-portal-collections
+
+  - name: Finnish National Gallery
+    location: Helsinki, Finland
+    data_formats: [api]
+    url: https://www.kansallisgalleria.fi/en/api-sovelluskehittajille
+    github: https://github.com/FinnishNationalGallery
+
+  - name: The Fitzwilliam Museum, University of Cambridge
+    location: Cambridge, UK
+    data_formats: [json, xml, api]
+    url: http://data.fitzmuseum.cam.ac.uk/
+    github: https://github.com/FitzwilliamMuseum/fitz-collection-raw-data
+
+  - name: Harvard Art Museums
+    location: Cambridge, MA
+    data_formats: [json, api, images]
+    url: https://www.harvardartmuseums.org/collections/api
+    github: https://github.com/harvardartmuseums/api-docs
 
   - name: The Metropolitan Museum of Art
     location: New York, NY
-    data_formats: [csv]
+    data_formats: [ csv ]
     url: https://www.metmuseum.org/art/collection
     github: https://github.com/metmuseum/openaccess
     dataset_download_link:
       - https://github.com/metmuseum/openaccess/raw/refs/heads/master/MetObjects.csv
 
-  - name: Museum of Modern Art (MoMA)
-    location: New York, NY
-    data_formats: [json, csv, json-ld, api]
-    url: https://www.moma.org/data/
-    github: https://github.com/MuseumOfModernArt/collection
-    notes: "API available for querying collections"
+  - name: Minneapolis Institute of Art
+    location: Minneapolis, MN
+    data_formats: [json, images]
+    url: https://collections.artsmia.org/
+    github: https://github.com/artsmia/collection
 
-  - name: Tate Gallery
-    location: London, UK
+  - name: MoMA
+    location: New York, NY
+    data_formats: [csv, json]
+    url: https://www.moma.org/collection/
+    github: https://github.com/MuseumofModernArt/collection
+
+  - name: National Gallery of Art
+    location: Washington, D.C.
     data_formats: [csv, images]
-    url: https://www.tate.org.uk/about-us/digital/collection-data
+    url: https://images.nga.gov/en/page/openaccess.html
+    github: https://github.com/NationalGalleryOfArt/opendata
+
+  - name: National Museum Australia
+    location: Canberra, Australia
+    data_formats: [api, images]
+    url: https://www.nma.gov.au/about/our-collection/museum-api
+    github: https://github.com/NationalMuseumAustralia/Collection-API
+    notes: "Need to apply for an API key"
+
+  - name: Penn Museum
+    location: Philadelphia, PA
+    data_formats: [csv, json, xml]
+    url: https://www.penn.museum/collections/objects/data.php
+    dataset_download_link:
+      - https://www.penn.museum/collections/assets/data/Penn_Museum_Collections_Data.csv
+    local_filename: Penn_Museum_Collections_Data.csv
+
+  - name: Queensland Gallery of Art/Gallery of Modern Art
+    location: Brisbane, Australia
+    data_formats: [csv, api]
+    url: https://www.data.qld.gov.au/dataset/qagoma-collection
+    local_filename: qagoma-collection-artworks-september-2024.csv
 
   - name: Rijksmuseum
     location: Amsterdam, Netherlands
-    data_formats: [json, api, images]
-    url: https://www.rijksmuseum.nl/en/api
-    notes: "Free API access for collections and high-quality images"
+    data_formats: [csv, life, europeana, api, images]
+    url: https://data.rijksmuseum.nl/object-metadata/download/
+    github: https://github.com/Rijksmuseum/rijksmuseum.github.io
 
-  - name: Smithsonian Institution
-    location: Washington, D.C., USA
-    data_formats: [csv, api, images, json]
-    url: https://www.si.edu/openaccess
-    notes: "Smith
+  - name: Tate
+    location: London, UK
+    data_formats: [csv, json]
+    url: http://www.tate.org.uk/about-us/policies-and-procedures/creative-commons-licences-tate
+    github: https://github.com/tategallery/collection
+
+  - name: Te Papa Tongarewa (Museum of New Zealand)
+    location: Wellington, New Zealand
+    data_formats: [images]
+    url: https://collections.tepapa.govt.nz/
+    github: https://github.com/te-papa/image-downloads-stats
+
+  - name: Victoria and Albert Museum
+    location: London, UK
+    data_formats: [json, xml, api]
+    url: https://www.vam.ac.uk/api
+
+  - name: Virginia Museum of Fine Arts
+    location: Richmond, VA
+    data_formats: [images]
+    url: https://www.vmfa.museum/collections/collections-archive/
+
+  - name: Walters Art Museum
+    location: Baltimore, MD
+    data_formats: [csv, api]
+    url: http://api.thewalters.org/
+    github: https://github.com/WaltersArtMuseum/walters-api
+
+  - name: Williams College Museum of Art
+    location: Williamstown, MA
+    data_formats: [csv, json]
+    url: https://wcma.williams.edu/wcma-digital-project/
+    github: https://github.com/wcmaart/collection
+    dataset_download_links:
+      - https://raw.githubusercontent.com/wcmaart/collection/refs/heads/master/wcma-collection.csv
+
+  - name: Wellcome Collection
+    location: London, UK
+    data_formats: [iiif, json, api]
+    url: https://developers.wellcomecollection.org/
+    github: https://github.com/wellcomecollection/catalogue-api
+
+  - name: Whitney Museum of American Art
+    location: New York, NY
+    data_formats: [csv]
+    url: https://whitney.org/open-access
+    github: https://github.com/whitneymuseum/open-access
