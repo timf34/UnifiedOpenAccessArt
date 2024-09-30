@@ -1,8 +1,7 @@
 import os
 import pandas as pd
 
-
-DATA_DIR: str = "../source_datasets"
+DATA_DIR: str = "../data/source_datasets"
 
 
 def analyse_headers_in_directory(directory_path):
@@ -26,7 +25,22 @@ def analyse_headers_in_directory(directory_path):
 
     return headers_dict
 
-def summarize_headers(headers_dict):
+
+def print_aligned_headers(headers_dict):
+    # Find the maximum length of the filename and headers for padding
+    max_filename_length = max(len(filename) for filename in headers_dict)
+    max_header_length = max(max(len(header) for header in headers) for headers in headers_dict.values())
+
+    # Print headers in a tabular format
+    print("\nHeaders in a unified format:")
+    for filename, headers in headers_dict.items():
+        print(f"{filename.ljust(max_filename_length)} : ", end="")
+        for header in headers:
+            print(f"{header.ljust(max_header_length)}", end=" | ")
+        print()  # New line after each file's headers
+
+
+def list_all_headers(headers_dict):
     # Set to store all unique headers
     unique_headers = set()
 
@@ -42,8 +56,11 @@ def main():
     # Analyze the headers in the specified directory
     headers_dict = analyse_headers_in_directory(DATA_DIR)
 
-    # Summarize the headers across all files
-    summarize_headers(headers_dict)
+    # Print the headers in a unified format
+    print_aligned_headers(headers_dict)
+
+    # # List all unique headers across all files
+    # list_all_headers(headers_dict)
 
 
 if __name__ == "__main__":
