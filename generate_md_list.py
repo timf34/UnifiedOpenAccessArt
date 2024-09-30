@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-import os
 import yaml
 
 
@@ -16,11 +13,11 @@ def create_markdown(yaml_file, output_file):
 
         # Table header
         md.write('### Datasets\n')
-        md.write('| Museum | Location | Data Formats | Links |\n')
-        md.write('| --- | --- | --- | --- |\n')
+        md.write('| # | Museum | Location | Data Formats | Links |\n')
+        md.write('| --- | --- | --- | --- | --- |\n')
 
-        # Generate table rows from YAML data
-        for museum in data['museums']:
+        # Generate table rows from YAML data, with numbering
+        for idx, museum in enumerate(data['museums'], start=1):
             name = museum['name']
             location = museum['location']
             formats = ', '.join(museum.get('data_formats', []))  # Join the formats as a comma-separated string
@@ -34,11 +31,11 @@ def create_markdown(yaml_file, output_file):
                 link_str += f'[Website]({url}) '
             if github:
                 link_str += f'[GitHub]({github}) '
-            for idx, link in enumerate(dataset_links):
-                link_str += f'[Dataset {idx + 1}]({link}) '
+            for idx_link, link in enumerate(dataset_links):
+                link_str += f'[Dataset {idx_link + 1}]({link}) '
 
-            # Write row to Markdown
-            md.write(f'| {name} | {location} | {formats} | {link_str} |\n')
+            # Write row to Markdown with numbering
+            md.write(f'| {idx} | {name} | {location} | {formats} | {link_str} |\n')
 
 
 if __name__ == '__main__':
