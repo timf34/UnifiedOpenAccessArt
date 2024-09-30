@@ -1,0 +1,1256 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://id.rijksmuseum.nl/200304211> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/2208064> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1888" ] ;
+                    crm:P82a_begin_of_the_begin "1888-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1889-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301100936>,
+        <https://id.rijksmuseum.nl/301101291>,
+        <https://id.rijksmuseum.nl/301101699>,
+        <https://id.rijksmuseum.nl/301104607>,
+        <https://id.rijksmuseum.nl/301123880>,
+        <https://id.rijksmuseum.nl/301142869>,
+        <https://id.rijksmuseum.nl/301142899>,
+        <https://id.rijksmuseum.nl/301146002>,
+        <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/301154224>,
+        <https://id.rijksmuseum.nl/3011738>,
+        <https://id.rijksmuseum.nl/301302794>,
+        <https://id.rijksmuseum.nl/30184102>,
+        <https://id.rijksmuseum.nl/3019034> ;
+    crm:P138i_has_representation <http://lh6.ggpht.com/d91eLpUD7w8vhaGPWNvuzmkUmo9xwAyhj79cxoobWCYeCIKPI3mCMir86UiZgWP0J7ip5D0qCxhvbvV0wutoyr8PnYQ=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "RP-T-1962-65" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/210136187> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301101699> ] ;
+            crm:P190_has_symbolic_content "JH1504" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/jh_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F1446" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301104607> ] ;
+            crm:P190_has_symbolic_content "F1446" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/200304211" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Landschap bij de abdij van Montmajour te Arles" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.304211> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Aankoop met steun van de Vereniging Rembrandt en het Prins Bernhard Fonds" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Purchased with the support of the Vereniging Rembrandt and the Prins Bernhard Fonds" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22095> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1962" ] ;
+                            crm:P82a_begin_of_the_begin "1962-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1963-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/220679> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "483" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "598" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/2202343>,
+        <https://id.rijksmuseum.nl/22036>,
+        <https://id.rijksmuseum.nl/220686>,
+        <https://id.rijksmuseum.nl/22097> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220123738>,
+                <https://id.rijksmuseum.nl/220131635>,
+                <https://id.rijksmuseum.nl/22093968> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "potlood, rietpen en verenpen in inkt, op velijnpapier; zwart krijt" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F1446> .
+
+<https://id.rijksmuseum.nl/20040047> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/21034116>,
+                <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/22027272> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1890-06-15" ] ;
+                    crm:P82a_begin_of_the_begin "1890-06-15T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1890-06-16T00:00:00+00:00"^^xsd:dateTime ] ;
+            crm:P7_took_place_at <https://id.rijksmuseum.nl/22051844> ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/301154354>,
+        <https://id.rijksmuseum.nl/301202045>,
+        <https://id.rijksmuseum.nl/30159254> ;
+    crm:P138i_has_representation <http://lh5.ggpht.com/eiAJJM9_EByX03PBlrRBULoadro_CzY-Zz6VDU0I-KkToqT9_NR2h-OF1LLeMx__XxPqGpcud9L6rPz6jKJ8ytzqOcU=s0> ;
+    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "De man met de pijp" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "L'Homme à la Pipe" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "RP-P-OB-20.603" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F1664-3" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/20040047" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Portret van dr. Gachet" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+            crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Portrait of Dr Gachet" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.40047> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Schenking van de heer P.F. Gachet" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Gift of P.F. Gachet" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22013> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1905" ] ;
+                            crm:P82a_begin_of_the_begin "1905-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1906-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/22091> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "151" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "181" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22036> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/21034116>,
+                <https://id.rijksmuseum.nl/220121005>,
+                <https://id.rijksmuseum.nl/220124938> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "ets" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "Portret van dokter Paul Ferdinand Gachet, pijp rokend. Geproduceerd ten huize van dr Gachet, kort na Van Goghs aankomst in Auvers op 20 mei 1890. De enige ets die hij ooit maakte." ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300411780> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ;
+    crm:P9_consists_of [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300257611> ] ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+                            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                                    crm:P14_carried_out_by <http://vocab.getty.edu/ulan/500321736> ] ;
+                            crm:P190_has_symbolic_content "2807c" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300404620> ] ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22054491> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "midden onder" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ],
+        [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300252927> ] ;
+            crm:P128_carries _:Na64611631b4c469aa8030dd8ad9e1376 ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P138_represents _:Na64611631b4c469aa8030dd8ad9e1376 ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22066190> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "verso" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ],
+        [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300257611> ] ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+                            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                                    crm:P14_carried_out_by <http://vocab.getty.edu/ulan/500321736> ] ;
+                            crm:P190_has_symbolic_content "2228a" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300404620> ] ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22054491> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "verso midden" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ],
+        [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300257611> ] ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+                            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                                    crm:P14_carried_out_by <http://vocab.getty.edu/ulan/500321736> ] ;
+                            crm:P190_has_symbolic_content "2760" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300404620> ] ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22054491> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "verso rechtsonder" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F1664-3> .
+
+<https://id.rijksmuseum.nl/20040048> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/22064876> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1885-04-16" ] ;
+                    crm:P82a_begin_of_the_begin "1885-04-16T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1885-04-17T00:00:00+00:00"^^xsd:dateTime ] ;
+            crm:P7_took_place_at <https://id.rijksmuseum.nl/22057966> ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/30159254> ;
+    crm:P138i_has_representation <http://lh6.ggpht.com/GlyQgIZEno8P_XhZK1yTsMk9Po_unNgU1u1mESDluU372mItxNAiQ_VUUOzpMoTQz564buak-FJkUGDdQfFDxppftEA=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "RP-P-1912-609" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F1661-8" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "De aardappeleters" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/20040048" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.40048> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22095> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1912" ] ;
+                            crm:P82a_begin_of_the_begin "1912-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1913-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/22091> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "340" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "280" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22036> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220121232>,
+                <https://id.rijksmuseum.nl/220121785> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "Lithografische versie van Van Goghs 'Aardappeleters': een boerengezin rond een tafel, verlicht door een olielamp, aardappels etend van een schaal." ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300411780> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "lithografie in zwart" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ;
+    crm:P9_consists_of [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300257611> ] ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+                            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                                    crm:P14_carried_out_by <http://vocab.getty.edu/ulan/500321736> ] ;
+                            crm:P190_has_symbolic_content "2228a" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300404620> ] ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22054491> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "verso midden onder" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F1661-8> .
+
+<https://id.rijksmuseum.nl/2007672> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/22027459>,
+                <https://id.rijksmuseum.nl/2208064> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1884-03" ] ;
+                    crm:P82a_begin_of_the_begin "1884-03-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1884-04-01T00:00:00+00:00"^^xsd:dateTime ] ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/301154354>,
+        <https://id.rijksmuseum.nl/301184870>,
+        <https://id.rijksmuseum.nl/301202045> ;
+    crm:P138i_has_representation <http://lh5.ggpht.com/QjSoKZOeS1lkYXUgPHgy9W3ZwFYoDGbXLknZ_z5RyjrKbi4eBMDW5ek5O2vcD5Mp-EtAWSIb8vCrqdR2I2HQrBDgpg=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "SK-A-2225" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/2007672" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F1129" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Weg achter de pastorietuin te Nuenen" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+            crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Road behind the Parsonage Garden in Nuenen" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.7672> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Schenking van J. Cohen Gosschalk-Bonger, Amsterdam" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Gift of J. Cohen Gosschalk-Bonger, Amsterdam" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22013> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1906-04" ] ;
+                            crm:P82a_begin_of_the_begin "1906-04-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1906-05-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/220679> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "538" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "393" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22036>,
+        <https://id.rijksmuseum.nl/22097> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220121757>,
+                <https://id.rijksmuseum.nl/220121758>,
+                <https://id.rijksmuseum.nl/220140130>,
+                <https://id.rijksmuseum.nl/22057966> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "Weg met knotwilgen en een man met een kruiwagen." ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300411780> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "potlood, pen en penseel in bruin" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+            crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "pencil, pen and brush in brown ink" ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P9_consists_of [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300252927> ] ;
+            crm:P128_carries _:N056f71fa7e484036844e8df5f0344b45 ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P138_represents _:N056f71fa7e484036844e8df5f0344b45 ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22053814> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "linksonder" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F1129> .
+
+<https://id.rijksmuseum.nl/2007673> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/2208064> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "c. 1888-06" ] ;
+                    crm:P82a_begin_of_the_begin "1888-06-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1888-07-01T00:00:00+00:00"^^xsd:dateTime ] ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/301154354>,
+        <https://id.rijksmuseum.nl/301202045> ;
+    crm:P138i_has_representation <http://lh3.ggpht.com/3fR9EhgRFF_kz66r1WVv7GtgXEEuf6UQ92J65DWrLipCvBm6mTjVBJ_gX6wZq839MlDbkBTrd6TU5du5KV8fP-V2a-U=s0> ;
+    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Boerderij in de Provence" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+            crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Farm in Provence" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F1478" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/2007673" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "SK-A-2226" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.7673> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Schenking van J. Cohen Gosschalk-Bonger, Amsterdam" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Gift of J. Cohen Gosschalk-Bonger, Amsterdam" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22013> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1906-04" ] ;
+                            crm:P82a_begin_of_the_begin "1906-04-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1906-05-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/220679> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "533" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "391" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22036>,
+        <https://id.rijksmuseum.nl/22097> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220121455>,
+                <https://id.rijksmuseum.nl/22042446> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "potlood en pen in bruin op papier" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+            crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "pencil and pen in brown on paper" ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F1478> .
+
+<https://id.rijksmuseum.nl/2007674> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/22027459> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1863 - 1890" ] ;
+                    crm:P82a_begin_of_the_begin "1863-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1891-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/301154354> ;
+    crm:P138i_has_representation <http://lh5.ggpht.com/LeONPNh8oPUpjMUWxUe3d0G_DkktDb3FKgQuy9rRe-1usn_Ls6u5yrQfvlLC3nARNJWTe3ZOLUR7-hbe1Zai6NN3RU8=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "SK-A-2227" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Korensnijder met hoed, van achteren gezien" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F1312" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/2007674" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.7674> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Schenking van J. Cohen Gosschalk-Bonger, Amsterdam" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Gift of J. Cohen Gosschalk-Bonger, Amsterdam" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22013> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1906-04" ] ;
+                            crm:P82a_begin_of_the_begin "1906-04-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1906-05-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/220679> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "362" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "483" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/2202343>,
+        <https://id.rijksmuseum.nl/22036>,
+        <https://id.rijksmuseum.nl/22097> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220121760>,
+                <https://id.rijksmuseum.nl/220121761> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "potlood, zwart krijt en penseel in bruin" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ;
+    crm:P9_consists_of [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300252927> ] ;
+            crm:P128_carries _:Nf718617d045d44159962f5e86aaaaa2a ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P138_represents _:Nf718617d045d44159962f5e86aaaaa2a ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22053814> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "rechtsonder" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F1312> .
+
+<https://id.rijksmuseum.nl/2008508> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1884" ] ;
+                    crm:P82a_begin_of_the_begin "1884-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1885-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301202045>,
+        <https://id.rijksmuseum.nl/3015253> ;
+    crm:P138i_has_representation <http://lh3.googleusercontent.com/rN30IB00bIGEgTm9OFA9U0yf4if6y7RhdKqvOVKd2Gf1wLmmqyCRP7Ok_QlJML5PPaZHyWnKN1vcPjcb_EC0pu63Xi0=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "SK-A-3307" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Boerendorp in de avond" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+            crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Farming Village at Twilight" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/2008508" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301104607> ] ;
+            crm:P190_has_symbolic_content "F190" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.8508> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Schenking van de heer en mevrouw Kessler-Hülsmann, Kapelle op den Bosch" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Gift of Mr and Mrs Kessler-Hülsmann, Kapelle op den Bosch" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22013> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1940-03" ] ;
+                            crm:P82a_begin_of_the_begin "1940-03-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1940-04-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/22016> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "82" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379098> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "57" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379098> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22018>,
+        <https://id.rijksmuseum.nl/22019> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220121270>,
+                <https://id.rijksmuseum.nl/220122860> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "Gezicht op een dorp in de avond. Aan de rand van een weiland, tussen bomen, staan verschillende lage huizen met rieten daken. In het midden staan twee figuren voor een hooiberg." ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300411780> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "olieverf op doek" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+            crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "oil on canvas" ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F190> .
+
+<https://id.rijksmuseum.nl/2009769> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P32_used_general_technique <https://id.rijksmuseum.nl/22027459>,
+                <https://id.rijksmuseum.nl/2208064> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1882-03" ] ;
+                    crm:P82a_begin_of_the_begin "1882-03-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1882-04-01T00:00:00+00:00"^^xsd:dateTime ] ;
+            crm:P7_took_place_at <https://id.rijksmuseum.nl/22031070> ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301100936>,
+        <https://id.rijksmuseum.nl/301101291>,
+        <https://id.rijksmuseum.nl/301123880>,
+        <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/301202045>,
+        <https://id.rijksmuseum.nl/3019034> ;
+    crm:P138i_has_representation <http://lh6.ggpht.com/RvKoP3sO4nXgRlIvSGLDcezVPQoaNOukS8uvv2JRUrhMbMV9VBD0bLFOA9vmg44Nq1Lh9VNLx0oxM1FnzT7a4RO3Tmdx=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/2009769" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F923" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Bloemkwekerij van Pierre van de Putte aan de Schenkweg te Den Haag" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+            crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Flower Nursery on the Schenkweg in The Hague" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "SK-A-3662" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.9769> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Legaat van de heer en mevrouw Drucker-Fraser, Montreux" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Mr and Mrs Drucker-Fraser Bequest, Montreux" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/220633> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1944" ] ;
+                            crm:P82a_begin_of_the_begin "1944-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1945-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/220679> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "334" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "240" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22024329>,
+        <https://id.rijksmuseum.nl/22036>,
+        <https://id.rijksmuseum.nl/22097> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/220121191>,
+                <https://id.rijksmuseum.nl/220122130>,
+                <https://id.rijksmuseum.nl/220122131>,
+                <https://id.rijksmuseum.nl/22067962> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "potlood, pen en penseel in inkt, gewassen, gehoogd met witte dekkende waterverf, op vegï¿½papier" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "2004-10-15" ] ;
+                            crm:P82a_begin_of_the_begin "2004-10-15T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "2004-10-16T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P9_consists_of [ a crm:E22_Human-Made_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P32_used_general_technique <http://vocab.getty.edu/aat/300252927> ] ;
+            crm:P128_carries _:N9ad00444ab914255b69c91625b4d29c0 ;
+            crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+                    crm:P138_represents _:N9ad00444ab914255b69c91625b4d29c0 ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22053814> ;
+                    crm:P3_has_note [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "linksonder" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300010269> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ] ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F923> .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.304211> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.40047> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.40048> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.7672> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.7673> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.7674> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.8508> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.9617> a crm:E42_Identifier .
+
+<http://hdl.handle.net/10934/RM0001.COLLECT.9769> a crm:E42_Identifier .
+
+<http://lh3.ggpht.com/3fR9EhgRFF_kz66r1WVv7GtgXEEuf6UQ92J65DWrLipCvBm6mTjVBJ_gX6wZq839MlDbkBTrd6TU5du5KV8fP-V2a-U=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh3.googleusercontent.com/Ckjq-HkB2XhEsbuMsei0MR5fLTODfkcXY8qQTG-XLHVxE0jLO9DnSYaVE8n1kCrcm9AMKzoWB2w03LrY0v7eoj5hYw=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh3.googleusercontent.com/rN30IB00bIGEgTm9OFA9U0yf4if6y7RhdKqvOVKd2Gf1wLmmqyCRP7Ok_QlJML5PPaZHyWnKN1vcPjcb_EC0pu63Xi0=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh5.ggpht.com/LeONPNh8oPUpjMUWxUe3d0G_DkktDb3FKgQuy9rRe-1usn_Ls6u5yrQfvlLC3nARNJWTe3ZOLUR7-hbe1Zai6NN3RU8=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh5.ggpht.com/QjSoKZOeS1lkYXUgPHgy9W3ZwFYoDGbXLknZ_z5RyjrKbi4eBMDW5ek5O2vcD5Mp-EtAWSIb8vCrqdR2I2HQrBDgpg=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh5.ggpht.com/eiAJJM9_EByX03PBlrRBULoadro_CzY-Zz6VDU0I-KkToqT9_NR2h-OF1LLeMx__XxPqGpcud9L6rPz6jKJ8ytzqOcU=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh6.ggpht.com/GlyQgIZEno8P_XhZK1yTsMk9Po_unNgU1u1mESDluU372mItxNAiQ_VUUOzpMoTQz564buak-FJkUGDdQfFDxppftEA=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh6.ggpht.com/RvKoP3sO4nXgRlIvSGLDcezVPQoaNOukS8uvv2JRUrhMbMV9VBD0bLFOA9vmg44Nq1Lh9VNLx0oxM1FnzT7a4RO3Tmdx=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<http://lh6.ggpht.com/d91eLpUD7w8vhaGPWNvuzmkUmo9xwAyhj79cxoobWCYeCIKPI3mCMir86UiZgWP0J7ip5D0qCxhvbvV0wutoyr8PnYQ=s0> a crm:E36_Visual_Item ;
+    dc:format "image/jpeg" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300215302> .
+
+<https://id.rijksmuseum.nl/220121191> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/41A6> .
+
+<https://id.rijksmuseum.nl/220121232> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/46A14> .
+
+<https://id.rijksmuseum.nl/220121270> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/25I2> .
+
+<https://id.rijksmuseum.nl/220121311> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/48C513> .
+
+<https://id.rijksmuseum.nl/220121435> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/48B3> .
+
+<https://id.rijksmuseum.nl/220121455> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/41D3> .
+
+<https://id.rijksmuseum.nl/220121757> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/46C1214> .
+
+<https://id.rijksmuseum.nl/220121758> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/31A71> .
+
+<https://id.rijksmuseum.nl/220121760> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/47I15(SICKLE)> .
+
+<https://id.rijksmuseum.nl/220121761> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/47I141> .
+
+<https://id.rijksmuseum.nl/220121785> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/41C4> .
+
+<https://id.rijksmuseum.nl/220122130> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/41C652> .
+
+<https://id.rijksmuseum.nl/220122131> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/47I3> .
+
+<https://id.rijksmuseum.nl/220122860> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/23R13> .
+
+<https://id.rijksmuseum.nl/220123738> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/11P3151> .
+
+<https://id.rijksmuseum.nl/220124938> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/49G(%2B3)> .
+
+<https://id.rijksmuseum.nl/220131635> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/25H16> .
+
+<https://id.rijksmuseum.nl/220140130> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/25G3(POLLARD%20WILLOW)> .
+
+<https://id.rijksmuseum.nl/22019> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300014078> .
+
+<https://id.rijksmuseum.nl/22024329> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300015071> .
+
+<https://id.rijksmuseum.nl/22027272> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300053241> .
+
+<https://id.rijksmuseum.nl/22031070> a crm:E53_Place ;
+    skos:exactMatch <http://vocab.getty.edu/tgn/7006810> .
+
+<https://id.rijksmuseum.nl/220380> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300014224> .
+
+<https://id.rijksmuseum.nl/22051844> a crm:E53_Place ;
+    skos:exactMatch <http://vocab.getty.edu/tgn/7008030> .
+
+<https://id.rijksmuseum.nl/2206> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300072633> .
+
+<https://id.rijksmuseum.nl/220633> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300417641> .
+
+<https://id.rijksmuseum.nl/22064876> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300053271> .
+
+<https://id.rijksmuseum.nl/22066190> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300028702> .
+
+<https://id.rijksmuseum.nl/220686> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300015012> .
+
+<https://id.rijksmuseum.nl/2009617> a crm:E22_Human-Made_Object ;
+    crm:P104_is_subject_to [ a crm:E30_Right ;
+            crm:P2_has_type <http://creativecommons.org/publicdomain/mark/1.0> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Public Domain/Free of rights" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+    crm:P108i_was_produced_by [ a crm:E12_Production ;
+            crm:P14_carried_out_by <https://id.rijksmuseum.nl/2103437> ;
+            crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                    crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "1887" ] ;
+                    crm:P82a_begin_of_the_begin "1887-01-01T00:00:00+00:00"^^xsd:dateTime ;
+                    crm:P82b_end_of_the_end "1888-01-01T00:00:00+00:00"^^xsd:dateTime ] ] ;
+    crm:P129i_is_subject_of <https://id.rijksmuseum.nl/301100936>,
+        <https://id.rijksmuseum.nl/301101291>,
+        <https://id.rijksmuseum.nl/301101699>,
+        <https://id.rijksmuseum.nl/301104607>,
+        <https://id.rijksmuseum.nl/301114892>,
+        <https://id.rijksmuseum.nl/301142876>,
+        <https://id.rijksmuseum.nl/301151451>,
+        <https://id.rijksmuseum.nl/30119878>,
+        <https://id.rijksmuseum.nl/301202045>,
+        <https://id.rijksmuseum.nl/301211153>,
+        <https://id.rijksmuseum.nl/301235376>,
+        <https://id.rijksmuseum.nl/301274270>,
+        <https://id.rijksmuseum.nl/30140463>,
+        <https://id.rijksmuseum.nl/3015253>,
+        <https://id.rijksmuseum.nl/3017276>,
+        <https://id.rijksmuseum.nl/30191888> ;
+    crm:P138i_has_representation <http://lh3.googleusercontent.com/Ckjq-HkB2XhEsbuMsei0MR5fLTODfkcXY8qQTG-XLHVxE0jLO9DnSYaVE8n1kCrcm9AMKzoWB2w03LrY0v7eoj5hYw=s0> ;
+    crm:P1_is_identified_by [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301151451> ] ;
+            crm:P190_has_symbolic_content "F295" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "https://id.rijksmuseum.nl/2009617" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300387580> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/210136187> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301101699> ] ;
+            crm:P190_has_symbolic_content "JH1211" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/jh_number> ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21099861> ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300157769> ;
+                    crm:P67i_is_referred_to_by <https://id.rijksmuseum.nl/301104607> ] ;
+            crm:P190_has_symbolic_content "F295" ;
+            crm:P2_has_type <https://vangoghworldwide.org/data/concept/f_number> ],
+        [ a crm:E33_E41_Linguistic_Appellation ;
+            crm:P190_has_symbolic_content "Zelfportret" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+            crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Self Portrait" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300417193> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+        [ a crm:E42_Identifier ;
+            crm:P141i_was_assigned_by [ a crm:E13_Attribute_Assignment ;
+                    crm:P14_carried_out_by <https://id.rijksmuseum.nl/21018560> ] ;
+            crm:P190_has_symbolic_content "SK-A-3262" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312355> ],
+        <http://hdl.handle.net/10934/RM0001.COLLECT.9617> ;
+    crm:P24i_changed_ownership_through [ a crm:E8_Acquisition ;
+            crm:P22_transferred_title_to <https://id.rijksmuseum.nl/21018560> ;
+            crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Schenking van F.W.M. barones Bonger-van der Borch van Verwolde, Almen" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Gift of F.W.M., Baroness Bonger-van der Borch van Verwolde, Almen" ;
+                            crm:P2_has_type <http://vocab.getty.edu/aat/300026687> ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ;
+            crm:P9i_forms_part_of [ a crm:E7_Activity ;
+                    crm:P2_has_type <https://id.rijksmuseum.nl/22013> ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "1936-06" ] ;
+                            crm:P82a_begin_of_the_begin "1936-06-01T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "1936-07-01T00:00:00+00:00"^^xsd:dateTime ] ] ] ;
+    crm:P2_has_type <https://id.rijksmuseum.nl/22016> ;
+    crm:P43_has_dimension [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/2206> ;
+            crm:P90_has_value "8" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379098> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22021> ;
+            crm:P90_has_value "42" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379098> ],
+        [ a crm:E54_Dimension ;
+            crm:P2_has_type <https://id.rijksmuseum.nl/22022> ;
+            crm:P90_has_value "34" ;
+            crm:P91_has_unit <http://vocab.getty.edu/aat/300379098> ] ;
+    crm:P45_consists_of <https://id.rijksmuseum.nl/22018>,
+        <https://id.rijksmuseum.nl/220380> ;
+    crm:P52_has_current_owner <https://id.rijksmuseum.nl/21018560> ;
+    crm:P65_shows_visual_item [ a crm:E36_Visual_Item ;
+            crm:P138_represents <https://id.rijksmuseum.nl/2103437>,
+                <https://id.rijksmuseum.nl/220121005>,
+                <https://id.rijksmuseum.nl/220121311>,
+                <https://id.rijksmuseum.nl/220121435> ] ;
+    crm:P67i_is_referred_to_by [ a crm:E33_Linguistic_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "2018-02-07" ] ;
+                            crm:P82a_begin_of_the_begin "2018-02-07T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "2018-02-08T00:00:00+00:00"^^xsd:dateTime ] ] ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312074> ;
+            crm:P9_consists_of [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Zelfportret" ;
+                    crm:P1i_identifies <https://id.rijksmuseum.nl/2009617> ;
+                    crm:P2_has_type <http://vocab.getty.edu./aat/300417207>,
+                        <http://vocab.getty.edu/aat/300404670> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "Self-portrait" ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+                [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Vincent van Gogh (1853–1890), olieverf op karton, 1887" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Vincent van Gogh (1853–1890), oil on cardboard, 1887" ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+                [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content """Nadat hij van zijn broer Theo had gehoord over de nieuwe kleurige Franse schilderkunst ging Vincent in 1886 in Parijs wonen. Al snel probeerde hij de Franse stijl uit op een aantal zelfportretten. Dit deed hij vooral om de kosten voor een
+          model uit te sparen. Hier schilderde hij zichzelf als een mondain geklede Parijzenaar, met losse, ritmische penseelstreken in opvallende kleuren.""" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300435416> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content """Vincent moved to Paris in 1886, after hearing from his brother Theo about the new, colourful style of French painting. Wasting no time, he tried it out in several self-portraits. He did this mostly to avoid having to pay for a model.
+          Using rhythmic brushstrokes in striking colours, he portrayed himself here as a fashionably dressed Parisian.""" ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P108i_was_produced_by [ a crm:E12_Production ;
+                    crm:P4_has_time-span [ a crm:E52_Time-Span ;
+                            crm:P1_is_identified_by [ a crm:E33_E41_Linguistic_Appellation ;
+                                    crm:P190_has_symbolic_content "2013-01-21" ] ;
+                            crm:P82a_begin_of_the_begin "2013-01-21T00:00:00+00:00"^^xsd:dateTime ;
+                            crm:P82b_end_of_the_end "2013-01-22T00:00:00+00:00"^^xsd:dateTime ] ] ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300312074> ;
+            crm:P9_consists_of [ a crm:E33_E41_Linguistic_Appellation ;
+                    crm:P190_has_symbolic_content "Zelfportret" ;
+                    crm:P1i_identifies <https://id.rijksmuseum.nl/2009617> ;
+                    crm:P2_has_type <http://vocab.getty.edu./aat/300417207>,
+                        <http://vocab.getty.edu/aat/300404670> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_E41_Linguistic_Appellation ;
+                            crm:P190_has_symbolic_content "Self-portrait" ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+                [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content """Nadat hij van zijn broer Theo had gehoord over de nieuwe kleurige Franse schilderkunst, ging Vincent in 1886 in Parijs wonen. Al snel probeerde hij de Franse stijl uit op een aantal zelfportretten. Dit deed hij vooral om de kosten voor
+          een model uit te sparen. Hier schilderde hij zichzelf als een mondain geklede Parijzenaar, met losse, ritmische penseelstreken in opvallende kleuren.""" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300435416> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content """Vincent moved to Paris in 1886, after hearing from his brother Theo about the new, colourful style of French painting. Wasting no time, he tried it out in several self-portraits. He did this mostly to avoid having to pay for a model.
+          Using rhythmic brushstrokes in striking colours, he portrayed himself here as a fashionably dressed Parisian.""" ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ],
+                [ a crm:E33_Linguistic_Object ;
+                    crm:P190_has_symbolic_content "Vincent van Gogh (1853–1890), olieverf op karton, 1887" ;
+                    crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+                    crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ;
+                    crm:P73_has_translation [ a crm:E33_Linguistic_Object ;
+                            crm:P190_has_symbolic_content "Vincent van Gogh (1853–1890), oil on cardboard, 1887" ;
+                            crm:P72_has_language <http://vocab.getty.edu/aat/300388277> ] ] ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "Zelfportret van Vincent van Gogh. Borstbeeld met bruine jas en grijze hoed." ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300411780> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ],
+        [ a crm:E33_Linguistic_Object ;
+            crm:P190_has_symbolic_content "olieverf op karton" ;
+            crm:P2_has_type <http://vocab.getty.edu/aat/300435429> ;
+            crm:P72_has_language <http://vocab.getty.edu/aat/300388256> ] ;
+    rdfs:seeAlso <https://vangoghworldwide.org/data/artwork/F295> .
+
+<https://id.rijksmuseum.nl/210136187> a crm:E39_Actor ;
+    rdfs:label "Jan Hulsker" ;
+    skos:exactMatch <http://www.wikidata.org/entity/Q395240>,
+        <https://data.rkd.nl/artists/347903> .
+
+<https://id.rijksmuseum.nl/21034116> a crm:E39_Actor ;
+    rdfs:label "Paul Ferdinand Gachet" ;
+    skos:exactMatch <http://vocab.getty.edu/ulan/500005111>,
+        <https://data.rkd.nl/artists/346511> .
+
+<https://id.rijksmuseum.nl/220121005> a crm:E55_Type ;
+    skos:exactMatch <http://iconclass.org/61B2> .
+
+<https://id.rijksmuseum.nl/22016> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300177435> .
+
+<https://id.rijksmuseum.nl/22018> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300015050> .
+
+<https://id.rijksmuseum.nl/2202343> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300080064> .
+
+<https://id.rijksmuseum.nl/22057966> a crm:E53_Place ;
+    skos:exactMatch <http://vocab.getty.edu/tgn/7006835> .
+
+<https://id.rijksmuseum.nl/22091> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300041273> .
+
+<https://id.rijksmuseum.nl/22095> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300417642> .
+
+<https://id.rijksmuseum.nl/22027459> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300022552> .
+
+<https://id.rijksmuseum.nl/22053814> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300028705> .
+
+<https://id.rijksmuseum.nl/22054491> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300028760> .
+
+<https://id.rijksmuseum.nl/2208064> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300022452> .
+
+<http://vocab.getty.edu/aat/300379098> a crm:E58_Measurement_Unit .
+
+<http://vocab.getty.edu/aat/300411780> a crm:E55_Type .
+
+<https://id.rijksmuseum.nl/220679> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300033973> .
+
+<https://id.rijksmuseum.nl/22097> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300022439> .
+
+<https://id.rijksmuseum.nl/22013> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300138913> .
+
+<https://id.rijksmuseum.nl/22036> a crm:E57_Material ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300014109> .
+
+<http://vocab.getty.edu/aat/300215302> a crm:E55_Type ;
+    rdfs:label "digital images" .
+
+<http://vocab.getty.edu/aat/300312355> a crm:E55_Type .
+
+<https://id.rijksmuseum.nl/22021> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300055644> .
+
+<https://id.rijksmuseum.nl/22022> a crm:E55_Type ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300055647> .
+
+<https://id.rijksmuseum.nl/2103437> a crm:E39_Actor ;
+    rdfs:label "Vincent van Gogh" ;
+    skos:exactMatch <http://vocab.getty.edu/ulan/500115588>,
+        <https://data.rkd.nl/artists/32439> .
+
+<https://id.rijksmuseum.nl/21099861> a crm:E39_Actor ;
+    rdfs:label "Jacob Baart de la Faille" ;
+    skos:exactMatch <http://www.wikidata.org/entity/Q312762>,
+        <https://data.rkd.nl/artists/359164> .
+
+<https://vangoghworldwide.org/data/concept/f_number> a crm:E55_Type .
+
+<http://vocab.getty.edu/aat/300379097> a crm:E58_Measurement_Unit .
+
+<http://vocab.getty.edu/aat/300026687> a crm:E55_Type .
+
+<http://vocab.getty.edu/aat/300388277> a crm:E56_Language .
+
+<http://vocab.getty.edu/aat/300388256> a crm:E56_Language .
+
+<https://id.rijksmuseum.nl/21018560> a crm:E39_Actor ;
+    rdfs:label "Rijksmuseum" ;
+    skos:exactMatch <http://vocab.getty.edu/ulan/500246547>,
+        <https://data.rkd.nl/artists/485537> .
+
+_:N056f71fa7e484036844e8df5f0344b45 a crm:E33_Linguistic_Object ;
+    crm:P190_has_symbolic_content "Vincent" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> .
+
+_:N9ad00444ab914255b69c91625b4d29c0 a crm:E33_Linguistic_Object ;
+    crm:P190_has_symbolic_content "Vincent" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> .
+
+_:Na64611631b4c469aa8030dd8ad9e1376 a crm:E33_Linguistic_Object ;
+    crm:P190_has_symbolic_content "\"L'Homme à la Pipe\" / Portrait de mon Père (Le Dr. Gachet) / Eau-forte de Vincent Van Gogh / Auvers s/Oise - Mai 1890 / Paul Gachet'" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> .
+
+_:Nf718617d045d44159962f5e86aaaaa2a a crm:E33_Linguistic_Object ;
+    crm:P190_has_symbolic_content "Vincent" ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300418049> .
+
