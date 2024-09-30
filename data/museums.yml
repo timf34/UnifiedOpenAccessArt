@@ -94,6 +94,14 @@ museums:
     url: https://images.nga.gov/en/page/openaccess.html
     github: https://github.com/NationalGalleryOfArt/opendata
 
+  - name: National Gallery of Ireland
+    location: Dublin, Ireland
+    data_formats: [csv]
+    url: https://data.gov.ie/dataset/national-gallery-of-ireland-creative-commons-list
+    dataset_download_links:
+      - https://data.gov.ie/dataset/1be8cf66-76b2-4f36-acad-26eccb3ad75d/resource/b772728f-44bf-4913-a36f-743615d0523c/download/ngi-images-available-under-creative-commons-license.csv
+    local_filename: national_gallery_ireland.csv
+
   - name: National Museum Australia
     location: Canberra, Australia
     data_formats: [api, images]
