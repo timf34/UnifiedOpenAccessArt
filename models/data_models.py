@@ -23,7 +23,7 @@ class Dimension(BaseModel):
 
 
 class Image(BaseModel):
-    url: str
+    url: Optional[str]
     copyright: Optional[str]
     type: Optional[str]  # e.g., "primary", "alternate", "detail"
 
