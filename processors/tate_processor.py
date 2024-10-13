@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from typing import List
+from datetime import datetime
 
 from base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation
@@ -13,73 +14,59 @@ class TateDataProcessor(BaseMuseumDataProcessor):
     def process_data(self, df: pd.DataFrame) -> List[UnifiedArtwork]:
         unified_data = []
         for _, row in df.iterrows():
-            # Function to clean and convert date strings
-            def clean_date(date_str):
-                if pd.isna(date_str):
-                    return None
-                # Remove parentheses and any non-digit characters
-                cleaned = re.sub(r'\D', '', str(date_str))
-                return int(cleaned) if cleaned else None
-            #
-            # print(row)
-            # print("\n\n ---------------- \n\n")
-            begin_date = clean_date(row['BeginDate'])
-            end_date = clean_date(row['EndDate'])
-
             artist = Artist(
-                name=row['Artist'],
-                birth_date=str(abs(begin_date)) if begin_date and begin_date < 0 else None,
-                death_date=str(end_date) if end_date and end_date > 0 else None,
-                nationality=row['Nationality'].strip('()'),
-                biography=row['ArtistBio'],
-                role="artist"
+                name=row['artist'],
+                birth_date=None,  # Tate data doesn't provide birth/death dates in this format
+                death_date=None,
+                nationality=None,  # Tate data doesn't provide nationality in this sample
+                biography=None,
+                role=row['artistRole']
             )
 
             dimensions = self.parse_dimensions(row)
 
-            # Handle potentially empty or NaN ImageURL
             images = []
-            if pd.notna(row['ImageURL']):
+            if pd.notna(row['thumbnailUrl']):
                 images.append(Image(
-                    url=row['ImageURL'],
-                    copyright=None,  # MOMA data doesn't provide this information
-                    type="primary"
+                    url=row['thumbnailUrl'],
+                    copyright=row['thumbnailCopyright'] if pd.notna(row['thumbnailCopyright']) else None,
+                    type="thumbnail"
                 ))
 
             location = ArtworkLocation(
-                gallery=None,  # MOMA data doesn't provide this information
+                gallery=None,
                 room=None,
                 wall=None,
-                current_location="On View" if row['OnView'] == 'Y' else "Not on View"
+                current_location=None  # Tate data doesn't provide current location in this sample
             )
 
             artwork = UnifiedArtwork(
-                id=str(row['ObjectID']),
-                accession_number=row['AccessionNumber'],
-                title=row['Title'],
+                id=str(row['id']),
+                accession_number=row['accession_number'],
+                title=row['title'],
                 artist=artist,
-                date_created=row['Date'],
-                date_start=None,  # Would need more complex parsing of 'Date' field
+                date_created=row['dateText'],
+                date_start=row['year'] if pd.notna(row['year']) else None,
                 date_end=None,
-                medium=row['Medium'] if pd.notna(row['Medium']) else None,
+                medium=row['medium'] if pd.notna(row['medium']) else "",
                 dimensions=dimensions,
-                credit_line=row['CreditLine'],
-                department=row['Department'],
-                classification=row['Classification'],
-                object_type=None,  # MOMA data doesn't provide this information
+                credit_line=row['creditLine'] if pd.notna(row['creditLine']) else "",
+                department=None,  # Tate data doesn't provide department in this sample
+                classification=None,  # Tate data doesn't provide classification in this sample
+                object_type=None,
                 culture=None,
                 period=None,
                 dynasty=None,
-                provenance=[],  # MOMA data doesn't provide this information
+                provenance=[],
                 description=None,
                 exhibition_history=None,
                 bibliography=None,
                 images=images,
-                is_public_domain=False,  # MOMA data doesn't provide this information
+                is_public_domain=False,  # Tate data doesn't provide this information in the sample
                 rights_and_reproduction=None,
                 location=location,
-                url=row['URL'] if pd.notna(row['URL']) else None,
-                source_museum="MOMA",
+                url=row['url'] if pd.notna(row['url']) else "",
+                source_museum="Tate",
                 original_metadata=row.to_dict()
             )
             unified_data.append(artwork)
@@ -88,17 +75,11 @@ class TateDataProcessor(BaseMuseumDataProcessor):
 
     def parse_dimensions(self, row) -> List[Dimension]:
         dimensions = []
-        dimension_fields = ['Height (cm)', 'Width (cm)', 'Depth (cm)', 'Diameter (cm)', 'Weight (kg)']
-
-        for field in dimension_fields:
-            if pd.notna(row[field]):
-                dim_type = field.split()[0].lower()
-                dimensions.append(Dimension(
-                    value=float(row[field]),
-                    unit="cm" if "cm" in field else "kg",
-                    type=dim_type
-                ))
-
+        if pd.notna(row['width']) and pd.notna(row['height']):
+            dimensions.append(Dimension(value=float(row['width']), unit=row['units'], type='width'))
+            dimensions.append(Dimension(value=float(row['height']), unit=row['units'], type='height'))
+        if pd.notna(row['depth']):
+            dimensions.append(Dimension(value=float(row['depth']), unit=row['units'], type='depth'))
         return dimensions
 
 
