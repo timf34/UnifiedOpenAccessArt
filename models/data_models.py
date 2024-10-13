@@ -48,7 +48,7 @@ class UnifiedArtwork(BaseModel):
     date_created: Optional[str]
     date_start: Optional[int]
     date_end: Optional[int]
-    medium: str
+    medium: Optional[str]
     dimensions: List[Dimension]
     credit_line: Optional[str]
     department: Optional[str]
