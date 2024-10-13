@@ -40,8 +40,8 @@ def create_markdown(yaml_file, output_file):
 
 if __name__ == '__main__':
     # Path to the input YAML file and the output Markdown file
-    input_yaml = 'data/museums.yml'
-    output_md = 'museums.md'
+    input_yaml = '../data/museums.yml'
+    output_md = '../data/museums.md'
 
     # Create the Markdown file from the YAML file
     create_markdown(input_yaml, output_md)
