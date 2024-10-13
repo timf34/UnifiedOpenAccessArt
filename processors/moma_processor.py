@@ -1,8 +1,6 @@
-import csv
 import pandas as pd
 import re
-from typing import List, Optional
-from datetime import datetime
+from typing import List
 
 from base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation
