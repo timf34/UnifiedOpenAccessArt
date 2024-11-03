@@ -3,7 +3,7 @@ import pandas as pd
 from typing import List, Optional
 from datetime import datetime, date
 
-from base_processor import BaseMuseumDataProcessor
+from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation, Provenance
 
 
