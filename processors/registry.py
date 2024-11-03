@@ -1,4 +1,4 @@
-from typing import Dict, Type
+from typing import Dict
 from pathlib import Path
 import importlib
 import logging
@@ -8,7 +8,16 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessorRegistry:
-    """Registry for museum data processors that automatically discovers and loads processor classes."""
+    """Registry for museum data processors with explicit file mappings."""
+
+    # Mapping of processor keys to their source file patterns
+    FILE_MAPPINGS = {
+        'cleveland_art': 'cleveland_museum_of_art.csv',
+        'moma': 'moma.csv',
+        'national_gallery_art_dc': 'national_gallery_of_art_dc.csv',
+        'qagoma': 'qagoma-collection-artworks-september-2024.csv',
+        'tate': 'tate_gallery.csv'
+    }
 
     def __init__(self):
         self._processors: Dict[str, BaseMuseumDataProcessor] = {}
@@ -39,7 +48,8 @@ class ProcessorRegistry:
                             attr != BaseMuseumDataProcessor):
                         # Initialize the processor
                         processor = attr()
-                        museum_name = attr_name.lower().replace('dataprocessor', '')
+                        # Extract museum name from the filename (remove '_processor.py')
+                        museum_name = file_path.stem.replace('_processor', '')
                         self._processors[museum_name] = processor
                         logger.info(f"Loaded processor: {attr_name}")
 
@@ -49,6 +59,10 @@ class ProcessorRegistry:
     def get_processor(self, museum_name: str) -> BaseMuseumDataProcessor:
         """Get a processor by museum name."""
         return self._processors.get(museum_name)
+
+    def get_source_file_pattern(self, museum_name: str) -> str:
+        """Get the source file pattern for a museum."""
+        return self.FILE_MAPPINGS.get(museum_name)
 
     def get_all_processors(self) -> Dict[str, BaseMuseumDataProcessor]:
         """Get all registered processors."""

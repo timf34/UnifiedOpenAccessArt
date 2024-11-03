@@ -93,17 +93,19 @@ class DatasetMerger:
                     logger.warning(f"No processor found for {museum_name}")
                     continue
 
-                file_pattern = f"*{museum_name}*.csv"
-                matching_files = list(source_dir.glob(file_pattern))
-
-                if not matching_files:
-                    logger.warning(f"No matching files found for {museum_name}")
+                source_file = self.registry.get_source_file_pattern(museum_name)
+                if not source_file:
+                    logger.warning(f"No source file mapping found for {museum_name}")
                     continue
 
-                file_path = str(matching_files[0])
+                file_path = source_dir / source_file
+                if not file_path.exists():
+                    logger.warning(f"Source file not found for {museum_name}: {file_path}")
+                    continue
+
                 logger.info(f"Processing {museum_name} data from {file_path}")
 
-                unified_artworks = processor.get_unified_data(file_path)
+                unified_artworks = processor.get_unified_data(str(file_path))
                 all_artworks.extend([self.flatten_artwork(artwork) for artwork in unified_artworks])
 
                 logger.info(f"Processed {len(unified_artworks)} artworks from {museum_name}")
