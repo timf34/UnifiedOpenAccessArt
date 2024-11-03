@@ -3,7 +3,7 @@ import re
 from typing import List
 from datetime import datetime
 
-from base_processor import BaseMuseumDataProcessor
+from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation
 
 
@@ -83,13 +83,17 @@ class TateDataProcessor(BaseMuseumDataProcessor):
         return dimensions
 
 
-# Usage
-processor = TateDataProcessor()
-unified_data = processor.get_unified_data('../data/source_datasets/tate_gallery.csv')
+def main():
+    processor = TateDataProcessor()
+    unified_data = processor.get_unified_data('../data/source_datasets/tate_gallery.csv')
 
-# Print first 10 records
-for artwork in unified_data[:10]:
-    print(artwork)
-    print()
+    # Print first 10 records
+    for artwork in unified_data[:10]:
+        print(artwork)
+        print()
 
-print(len(unified_data))
+    print(len(unified_data))
+
+
+if __name__ == '__main__':
+    main()
