@@ -1,7 +1,7 @@
 import re
 import pandas as pd
 from typing import List, Optional
-from datetime import datetime, date
+from datetime import datetime
 
 from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation, Provenance
