@@ -1,7 +1,6 @@
 import pandas as pd
 import re
 from typing import List, Optional
-from datetime import datetime
 
 from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation, Provenance
@@ -32,20 +31,21 @@ class NGADataProcessor(BaseMuseumDataProcessor):
 
         artist = Artist(
             name=row['attributioninverted'] if pd.notna(row['attributioninverted']) else row['attribution'],
-            birth_date=None,  # Would need additional parsing of attribution text
+            birth_date=None,
             death_date=None,
-            nationality=None,  # Not directly provided in the data
+            nationality=None,
             biography=None,
             role=None
         )
 
         dimensions = self._parse_dimensions(row['dimensions'] if pd.notna(row['dimensions']) else "")
 
+        # Convert locationid to string or None if NaN
         location = ArtworkLocation(
             gallery=None,
             room=None,
             wall=None,
-            current_location=row['locationid'] if pd.notna(row['locationid']) else None
+            current_location=str(int(row['locationid'])) if pd.notna(row['locationid']) else None
         )
 
         images = []
@@ -81,7 +81,7 @@ class NGADataProcessor(BaseMuseumDataProcessor):
             is_public_domain=True,  # NGA's open access policy
             rights_and_reproduction=None,
             location=location,
-            url=None,  # Would need to construct from base URL + objectid
+            url=None,
             source_museum="National Gallery of Art DC",
             original_metadata=row.to_dict()
         )
@@ -92,27 +92,21 @@ class NGADataProcessor(BaseMuseumDataProcessor):
         if not dimensions_str:
             return dimensions
 
-        # Split multiple dimension entries
-        for entry in dimensions_str.split(';'):
-            entry = entry.strip()
-            if not entry:
-                continue
+        # Look for patterns like "x.x × y.y cm" or "x × y × z in."
+        matches = re.finditer(r'(\d+\.?\d*)\s*[×x]\s*(\d+\.?\d*)(?:\s*[×x]\s*(\d+\.?\d*))?\s*(cm|in)', dimensions_str)
 
-            # Try to find dimension values with units
-            matches = re.findall(r'(\d+\.?\d*)\s*[×x]\s*(\d+\.?\d*)\s*(?:×\s*(\d+\.?\d*))?\s*(cm|in)', entry)
-            if matches:
-                for match in matches:
-                    values = [float(x) for x in match[:-1] if x]  # Convert all numbers to float
-                    unit = match[-1]
+        for match in matches:
+            values = [float(x) for x in match.groups()[:-1] if x is not None]
+            unit = match.group(4)
 
-                    # Assign dimensions in order: width, height, depth
-                    dimension_types = ['width', 'height', 'depth']
-                    for value, dim_type in zip(values, dimension_types):
-                        dimensions.append(Dimension(
-                            value=value,
-                            unit=unit,
-                            type=dim_type
-                        ))
+            # Assign dimensions in order: width, height, depth
+            dimension_types = ['width', 'height', 'depth']
+            for value, dim_type in zip(values, dimension_types):
+                dimensions.append(Dimension(
+                    value=value,
+                    unit=unit,
+                    type=dim_type
+                ))
 
         return dimensions
 
@@ -122,8 +116,8 @@ class NGADataProcessor(BaseMuseumDataProcessor):
             return []
 
         provenance_entries = []
-        # Split on semicolons or periods for separate entries
-        entries = re.split(r'[;.]', provenance_text)
+        # Split on semicolons for separate entries
+        entries = provenance_text.split(';')
 
         for entry in entries:
             entry = entry.strip()
