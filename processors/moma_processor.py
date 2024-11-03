@@ -2,7 +2,7 @@ import pandas as pd
 import re
 from typing import List
 
-from base_processor import BaseMuseumDataProcessor
+from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation
 
 """
@@ -107,11 +107,15 @@ class MOMADataProcessor(BaseMuseumDataProcessor):
         return dimensions
 
 
-# Usage
-processor = MOMADataProcessor()
-unified_data = processor.get_unified_data('../data/source_datasets/moma.csv')
+def main():
+    processor = MOMADataProcessor()
+    unified_data = processor.get_unified_data('../data/source_datasets/moma.csv')
 
-# Print the first 10 rows
-for artwork in unified_data[:10]:
-    print(artwork)
-    print("\n\n")
+    # Print the first 10 rows
+    for artwork in unified_data[:10]:
+        print(artwork)
+        print("\n\n")
+
+
+if __name__ == "__main__":
+    main()
