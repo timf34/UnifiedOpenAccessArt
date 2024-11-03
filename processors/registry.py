@@ -19,6 +19,7 @@ class ProcessorRegistry:
         'tate': 'tate_gallery.csv',
         'cmoa': 'cmoa.csv',
         'penn_museum': 'Penn_Museum_Collections_Data.csv',
+        'rijksmuseum': '202001-rma-csv-collection.csv',
     }
 
     def __init__(self):
