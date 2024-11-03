@@ -5,6 +5,11 @@ from typing import List
 from base_processor import BaseMuseumDataProcessor
 from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation
 
+"""
+TODO:
+date_created='1976-77'... I think this should be more singular. It's easier to query that way. 
+"""
+
 
 class MOMADataProcessor(BaseMuseumDataProcessor):
     def load_data(self, file_path: str) -> pd.DataFrame:
@@ -106,3 +111,7 @@ class MOMADataProcessor(BaseMuseumDataProcessor):
 processor = MOMADataProcessor()
 unified_data = processor.get_unified_data('../data/source_datasets/moma.csv')
 
+# Print the first 10 rows
+for artwork in unified_data[:10]:
+    print(artwork)
+    print("\n\n")
