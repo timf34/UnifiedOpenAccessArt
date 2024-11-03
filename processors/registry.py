@@ -16,7 +16,8 @@ class ProcessorRegistry:
         'moma': 'moma.csv',
         'national_gallery_art_dc': 'national_gallery_of_art_dc.csv',
         'qagoma': 'qagoma-collection-artworks-september-2024.csv',
-        'tate': 'tate_gallery.csv'
+        'tate': 'tate_gallery.csv',
+        'cmoa': 'cmoa.csv',
     }
 
     def __init__(self):
