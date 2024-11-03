@@ -1,5 +1,7 @@
 """
 When flattening this to a CSV file, we'll need to flatten the nested fields.
+
+TODO: have a musem field and date of museum dataset
 """
 
 from typing import List, Optional
