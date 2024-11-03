@@ -1,12 +1,11 @@
 import pandas as pd
-from typing import List, Dict
+from typing import Dict
 from pathlib import Path
 import logging
 from datetime import datetime
 
-from processors.tate_processor import TateDataProcessor
-from processors.moma_processor import MOMADataProcessor
-from models.data_models import UnifiedArtwork, Dimension, Image
+from processors import ProcessorRegistry
+from models.data_models import UnifiedArtwork
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,10 +13,8 @@ logger = logging.getLogger(__name__)
 
 class DatasetMerger:
     def __init__(self):
-        self.processors = {
-            'tate': TateDataProcessor(),
-            'moma': MOMADataProcessor(),
-        }
+        self.registry = ProcessorRegistry()
+        logger.info(f"Initialized merger with support for museums: {self.registry.supported_museums}")
 
     def flatten_artwork(self, artwork: UnifiedArtwork) -> Dict:
         """Flatten a UnifiedArtwork object into a dictionary suitable for CSV conversion."""
@@ -89,8 +86,13 @@ class DatasetMerger:
         """Process data from all supported museums and combine into a single DataFrame."""
         all_artworks = []
 
-        for museum_name, processor in self.processors.items():
+        for museum_name in self.registry.supported_museums:
             try:
+                processor = self.registry.get_processor(museum_name)
+                if not processor:
+                    logger.warning(f"No processor found for {museum_name}")
+                    continue
+
                 file_pattern = f"*{museum_name}*.csv"
                 matching_files = list(source_dir.glob(file_pattern))
 
