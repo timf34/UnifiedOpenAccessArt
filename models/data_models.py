@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Optional
-from pydantic import BaseModel, HttpUrl, field_validator, Field
+from pydantic import BaseModel, HttpUrl, model_validator
 
 
 class DateType(Enum):
@@ -11,26 +11,28 @@ class DateType(Enum):
 
 
 class DateInfo(BaseModel):
-    """Simple parseable date representation."""
+    """
+    Simple parseable date representation.
+    For BCE dates, years are stored as positive integers with is_bce=True
+    rather than negative integers to make querying and display simpler.
+    """
     type: DateType
     display_text: str  # Original text: "15th century", "1980-1981"
-    start_year: Optional[int]  # Start year, e.g., 1980 or 1400
-    end_year: Optional[int]  # End year, e.g., 1981 or 1499
+    start_year: Optional[int]  # Start year as positive integer
+    end_year: Optional[int]  # End year as positive integer
+    is_bce: bool = False  # Flag to indicate if the date is BCE
 
-    @field_validator("end_year")
-    @classmethod
-    def validate_year_range(cls, end_year: Optional[int], info) -> Optional[int]:
-        """Validate end_year is after start_year for YEAR_RANGE type."""
-        # Get the data dict directly from the validation context
-        data = info.data
-
-        # Only validate if this is a year range and we have both years
-        if (data.get('type') == DateType.YEAR_RANGE
-                and data.get('start_year') is not None
-                and end_year is not None):
-            if end_year < data['start_year']:
-                raise ValueError("end_year must be greater than or equal to start_year")
-        return end_year
+    @model_validator(mode="after")
+    def validate_year_range(self):
+        """Validate end_year is chronologically after start_year for YEAR_RANGE type."""
+        if self.type == DateType.YEAR_RANGE and self.start_year is not None and self.end_year is not None:
+            if self.is_bce:
+                if self.end_year > self.start_year:
+                    raise ValueError(
+                        "For BCE dates, end_year must be chronologically later (smaller number) than start_year")
+            elif self.end_year < self.start_year:
+                raise ValueError("For CE dates, end_year must be >= start_year")
+        return self
 
 
 class Museum(BaseModel):
@@ -54,8 +56,8 @@ class Artist(BaseModel):
 
 class Image(BaseModel):
     """Model representing an image associated with artwork."""
-    url: Optional[HttpUrl]  # Ensures a valid URL if provided
-    copyright: Optional[str]  # Copyright information
+    url: Optional[HttpUrl] = None  # Ensures a valid URL if provided
+    copyright: Optional[str] = None  # Copyright information
 
 
 class UnifiedArtwork(BaseModel):
