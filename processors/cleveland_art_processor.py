@@ -4,14 +4,20 @@ from typing import List, Optional
 from datetime import datetime
 
 from processors.base_processor import BaseMuseumDataProcessor
-from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation, Provenance
+from models.data_models import UnifiedArtwork, Artist, Museum, ArtObject, Image, DateInfo, DateType
 
 
 class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
     def load_data(self, file_path: str) -> pd.DataFrame:
-        return pd.read_csv(file_path, encoding='utf-8', nrows=100)  # Temp limiting to 100 rows for testing
+        """
+        Load CSV data using pandas.
+        """
+        return pd.read_csv(file_path, encoding='utf-8', low_memory=False)
 
     def process_data(self, df: pd.DataFrame) -> List[UnifiedArtwork]:
+        """
+        Process each row in the DataFrame to create UnifiedArtwork objects.
+        """
         unified_data = []
         for _, row in df.iterrows():
             try:
@@ -20,178 +26,183 @@ class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
             except Exception as e:
                 print(f"Error processing row {row.get('id', 'unknown')}: {str(e)}")
                 continue
-
         return unified_data
 
     def _create_artwork(self, row: pd.Series) -> UnifiedArtwork:
-        """Create a UnifiedArtwork object from a row of data."""
+        """
+        Create a UnifiedArtwork object from a row of data.
+        """
         return UnifiedArtwork(
-            id=str(row.get('id', '')),
-            accession_number=str(row.get('accession_number', '')),
-            title=str(row.get('title', 'Untitled')),  # Fallback to 'Untitled' if missing
+            id=f"cleveland_{str(row.get('id', ''))}",
+            museum=Museum(name="Cleveland Museum of Art"),
+            object=ArtObject(
+                name=str(row.get('title', 'Untitled')),
+                creation_date=self._parse_date(row),
+                type=row.get('type')  # Correctly mapping 'type' field
+            ),
             artist=self._parse_artist(row),
-            date_created=row.get('creation_date'),
-            date_start=self._parse_year(row.get('creation_date_earliest')),
-            date_end=self._parse_year(row.get('creation_date_latest')),
-            medium=row.get('medium'),
-            dimensions=self._parse_dimensions(row),
-            credit_line=row.get('credit_line'),
-            department=row.get('department'),
-            classification=row.get('classification'),
-            object_type=row.get('classification'),  # Using classification as object_type
-            culture=row.get('culture'),  # Optional
-            period=row.get('period'),  # Optional
-            dynasty=row.get('dynasty'),  # Optional
-            provenance=self._parse_provenance(row.get('provenance_text', '')),
-            description=row.get('description'),
-            exhibition_history=row.get('exhibition_history'),
-            bibliography=row.get('bibliography'),
             images=self._parse_images(row),
-            is_public_domain=bool(row.get('is_public_domain', False)),  # Defaults to False
-            rights_and_reproduction=row.get('rights_and_reproduction'),
-            location=self._parse_location(row),
-            url=row.get('web_url'),
-            source_museum="Cleveland Museum of Art",
-            original_metadata=row.to_dict()
+            web_url=row.get('url'),  # Assuming 'url' is the correct web URL field
+            metadata=self._create_metadata(row)
         )
 
-    def _parse_dimensions(self, row: pd.Series) -> List[Dimension]:
-        """Parse dimensions from individual dimension fields."""
-        dimensions = []
-        dimension_mapping = {
-            'item_width': 'width',
-            'item_height': 'height',
-            'item_depth': 'depth',
-            'item_diameter': 'diameter'
-        }
+    def _parse_date(self, row: pd.Series) -> Optional[DateInfo]:
+        """
+        Parse creation date into standardized format.
+        """
+        # Extract earliest and latest dates
+        earliest = row.get('creation_date_earliest')
+        latest = row.get('creation_date_latest')
+        display_text = row.get('creation_date', '')
 
-        for field, dim_type in dimension_mapping.items():
-            value = row.get(field)
-            if pd.notna(value) and float(value) > 0:
-                dimensions.append(Dimension(
-                    value=float(value),
-                    unit='inches',  # Based on sample data
-                    type=dim_type
-                ))
+        if pd.isna(display_text):
+            return None
 
-        return dimensions
+        # Try to parse earliest and latest
+        start_year = self._parse_year(earliest)
+        end_year = self._parse_year(latest)
+
+        # Determine date type
+        if start_year is None and end_year is None:
+            # Attempt to parse display_text as a single year
+            start_year = self._parse_year(display_text)
+            if start_year:
+                return DateInfo(
+                    type=DateType.YEAR,
+                    display_text=str(display_text),
+                    start_year=start_year,
+                    end_year=start_year
+                )
+            else:
+                return DateInfo(
+                    type=DateType.UNKNOWN,
+                    display_text=str(display_text),
+                    start_year=None,
+                    end_year=None
+                )
+        elif start_year is not None and end_year is None:
+            return DateInfo(
+                type=DateType.YEAR,
+                display_text=str(display_text),
+                start_year=start_year,
+                end_year=start_year
+            )
+        elif start_year == end_year:
+            return DateInfo(
+                type=DateType.YEAR,
+                display_text=str(display_text),
+                start_year=start_year,
+                end_year=start_year
+            )
+        elif start_year is not None and end_year is not None:
+            return DateInfo(
+                type=DateType.YEAR_RANGE,
+                display_text=str(display_text),
+                start_year=start_year,
+                end_year=end_year
+            )
+        else:
+            return DateInfo(
+                type=DateType.UNKNOWN,
+                display_text=str(display_text),
+                start_year=None,
+                end_year=None
+            )
 
     def _parse_year(self, date_str: Optional[str]) -> Optional[int]:
-        """Parse year from date string."""
+        """
+        Parse year from date string.
+        """
         if pd.isna(date_str):
             return None
         try:
-            # Handle dates in format MM/DD/YYYY
-            parsed_date = datetime.strptime(date_str, '%m/%d/%Y')
-            return parsed_date.year
+            # Handle dates in format MM/DD/YYYY or YYYY
+            if isinstance(date_str, str):
+                # Extract the first four-digit number as the year
+                match = re.search(r'(\d{4})', date_str)
+                if match:
+                    return int(match.group(1))
+            elif isinstance(date_str, (int, float)):
+                return int(date_str)
+            return None
         except (ValueError, TypeError):
             return None
 
-    def _parse_provenance(self, provenance_text: str) -> List[Provenance]:
-        """Parse provenance text into structured format."""
-        if pd.isna(provenance_text) or not provenance_text.strip():
-            return []
-
-        provenance_entries = []
-        entries = provenance_text.split(';')
-
-        for entry in entries:
-            entry = entry.strip()
-            if not entry:
-                continue
-
-            # Simple date extraction - looking for years
-            date_match = re.search(r'\b\d{4}\b', entry)
-
-            provenance_entries.append(Provenance(
-                description=entry,
-                # Don't try to parse the date string, just store the description
-                date=None
-            ))
-
-        return provenance_entries
-
     def _parse_artist(self, row: pd.Series) -> Artist:
-        """Parse artist information from the 'creators' column."""
+        """
+        Parse artist information from the 'creators' field.
+        """
         creators = row.get('creators', '')
         if not creators or pd.isna(creators):
             return Artist(
-                name='Unknown',
-                birth_date=None,
-                death_date=None,
-                nationality=None,
-                biography=None,
-                role=None
+                name='Unknown Artist',
+                birth_year=None,
+                death_year=None
             )
 
-        # Split by parentheses to extract the main parts
         try:
-            name_part, details_part = creators.split('(', 1)
-            name = name_part.strip().lower()
+            # Simplistic parsing: assume the first creator is the main artist
+            # Split by semicolon or comma if multiple creators exist
+            creators_list = re.split(r';|,', str(creators))
+            main_creator = creators_list[0].strip()
 
-            # Further split the details part to extract nationality, dates, and role
-            details_part = details_part.strip(')')
-            details = details_part.split(',')
-            nationality = details[0].strip() if len(details) > 0 else None
-
-            # Extract birth and death years
-            date_part = details[1].strip() if len(details) > 1 else None
-            birth_year, death_year = None, None
-            if date_part and '-' in date_part:
-                birth_year, death_year = date_part.split('-')
-                birth_year = int(birth_year.strip()) if birth_year.strip().isdigit() else None
-                death_year = int(death_year.strip()) if death_year.strip().isdigit() else None
-
-            # Extract role (e.g., "artist", "sculptor") if it exists
-            role = details[2].strip() if len(details) > 2 else None
+            # Optionally, remove any non-alphabetic characters or unwanted tokens
+            main_creator = re.sub(r'\([^)]*\)', '', main_creator).strip()
 
             return Artist(
-                name=name,
-                birth_date=birth_year,
-                death_date=death_year,
-                nationality=nationality,
-                biography=None,
-                role=role
+                name=main_creator if main_creator else 'Unknown Artist',
+                birth_year=None,  # Birth and death years are not provided in 'creators'
+                death_year=None
             )
-
-        except ValueError:
-            # In case of unexpected format, return a fallback
+        except Exception:
             return Artist(
-                name=creators.lower(),
-                birth_date=None,
-                death_date=None,
-                nationality=None,
-                biography=None,
-                role=None
+                name='Unknown Artist',
+                birth_year=None,
+                death_year=None
             )
 
     def _parse_images(self, row: pd.Series) -> List[Image]:
-        """Parse image information."""
+        """
+        Parse image information from 'image_web', 'image_print', and 'image_full' fields.
+        """
         images = []
-        if pd.notna(row.get('image_url')):
-            images.append(Image(
-                url=row['image_url'],
-                copyright=None,
-                type="primary"
-            ))
+        # List of image fields to check
+        image_fields = ['image_web', 'image_print', 'image_full']
+        for field in image_fields:
+            url = row.get(field)
+            if pd.notna(url):
+                images.append(Image(
+                    url=url,
+                    copyright=None
+                ))
         return images
 
-    def _parse_location(self, row: pd.Series) -> ArtworkLocation:
-        """Parse location information."""
-        return ArtworkLocation(
-            gallery=None,
-            room=None,
-            wall=None,
-            current_location=row.get('physical_location')
-        )
+    def _create_metadata(self, row: pd.Series) -> dict:
+        """
+        Store all additional metadata in a dictionary.
+        Exclude fields already processed.
+        """
+        # Convert the row to a dictionary
+        metadata = row.to_dict()
+        # Fields already processed and should be excluded from metadata
+        processed_fields = {
+            'id', 'title', 'creators', 'creation_date',
+            'creation_date_earliest', 'creation_date_latest',
+            'type', 'image_web', 'image_print', 'image_full', 'url'
+        }
+
+        # Exclude processed fields and any NaN values
+        return {
+            k: v for k, v in metadata.items()
+            if k not in processed_fields and pd.notna(v)
+        }
 
 
-# Usage example
 if __name__ == "__main__":
     processor = ClevelandMuseumDataProcessor()
     unified_data = processor.get_unified_data('../data/source_datasets/cleveland_museum_of_art.csv')
-    print(f"Processed {len(unified_data)} artworks")
+    print(f"Processed {len(unified_data)} artworks\n")
 
-    for artwork in unified_data[:10]:
-        print(artwork)
-        print("\n\n")
+    for artwork in unified_data[:5]:
+        print(artwork.dict())
+        print()

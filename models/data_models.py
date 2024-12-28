@@ -19,11 +19,16 @@ class DateInfo(BaseModel):
 
     @field_validator("end_year")
     @classmethod
-    def validate_year_range(cls, end_year, values):
-        start_year = values.get("start_year")
-        date_type = values.get("type")
-        if date_type == DateType.YEAR_RANGE and start_year is not None and end_year is not None:
-            if end_year < start_year:
+    def validate_year_range(cls, end_year: Optional[int], info) -> Optional[int]:
+        """Validate end_year is after start_year for YEAR_RANGE type."""
+        # Get the data dict directly from the validation context
+        data = info.data
+
+        # Only validate if this is a year range and we have both years
+        if (data.get('type') == DateType.YEAR_RANGE
+                and data.get('start_year') is not None
+                and end_year is not None):
+            if end_year < data['start_year']:
                 raise ValueError("end_year must be greater than or equal to start_year")
         return end_year
 
