@@ -38,12 +38,20 @@ def parse_creators(raw_val: Any, row: pd.Series) -> Artist:
 def parse_images(raw_val: Any, row: pd.Series) -> list[Image]:
     """
     Cleveland has 3 columns: image_web, image_print, image_full
-    But here, each column is separate so we might just parse them individually.
-    For demonstration, assume raw_val is always an image URL.
+    Each image column will use the 'share_license_status' for copyright.
     """
     if pd.isna(raw_val):
         return []
-    return [Image(url=str(raw_val))]
+
+    image_url = str(raw_val)
+    # Fetch 'share_license_status' from the row
+    share_license_status = row.get('share_license_status', None)
+    if pd.isna(share_license_status):
+        share_license_status = None
+    else:
+        share_license_status = str(share_license_status)
+
+    return [Image(url=image_url, copyright=share_license_status)]
 
 
 class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
