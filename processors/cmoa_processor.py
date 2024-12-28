@@ -1,3 +1,8 @@
+"""
+Note: This one took less than 30 minutes!
+
+Here was the ChatGPT chat URL: https://chatgpt.com/c/676f8192-6fc8-8012-9d3b-03bd993832ce
+"""
 import pandas as pd
 import re
 from typing import Any, Optional
