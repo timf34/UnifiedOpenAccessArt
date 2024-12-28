@@ -1,77 +1,64 @@
-"""
-When flattening this to a CSV file, we'll need to flatten the nested fields.
+from enum import Enum
+from typing import Optional
+from pydantic import BaseModel, HttpUrl, field_validator, Field
 
-TODO: have a museum field and date of museum dataset
-"""
 
-from typing import List, Optional
-from pydantic import BaseModel, Field
-from datetime import date
+class DateType(Enum):
+    YEAR = "year"  # Single year: "1889"
+    YEAR_RANGE = "range"  # Range of years: "1980-1981"
+    CENTURY = "century"  # Century: "15th century"
+    UNKNOWN = "unknown"  # Unparseable or missing date
+
+
+class DateInfo(BaseModel):
+    """Simple parseable date representation."""
+    type: DateType
+    display_text: str  # Original text: "15th century", "1980-1981"
+    start_year: Optional[int]  # Start year, e.g., 1980 or 1400
+    end_year: Optional[int]  # End year, e.g., 1981 or 1499
+
+    @field_validator("end_year")
+    @classmethod
+    def validate_year_range(cls, end_year, values):
+        start_year = values.get("start_year")
+        date_type = values.get("type")
+        if date_type == DateType.YEAR_RANGE and start_year is not None and end_year is not None:
+            if end_year < start_year:
+                raise ValueError("end_year must be greater than or equal to start_year")
+        return end_year
+
+
+class Museum(BaseModel):
+    """Model representing a museum."""
+    name: str
+
+
+class ArtObject(BaseModel):
+    """Model representing an art object."""
+    name: str
+    creation_date: Optional[DateInfo]
+    type: Optional[str]  # e.g., painting, sculpture, etc.
 
 
 class Artist(BaseModel):
-    name: str
-    birth_date: Optional[str]
-    death_date: Optional[str]
-    nationality: Optional[str]
-    biography: Optional[str]
-    role: Optional[str]
-
-
-class Dimension(BaseModel):
-    value: float
-    unit: str
-    type: str  # e.g., "height", "width", "depth", "diameter"
+    """Model representing an artist."""
+    name: str  # Format: "Last Name, First Name"
+    birth_year: Optional[int]
+    death_year: Optional[int]
 
 
 class Image(BaseModel):
-    url: Optional[str]
-    copyright: Optional[str]
-    type: Optional[str]  # e.g., "primary", "alternate", "detail"
-
-
-class ArtworkLocation(BaseModel):
-    gallery: Optional[str]
-    room: Optional[str]
-    wall: Optional[str]
-    current_location: Optional[str]
-
-
-class Provenance(BaseModel):
-    description: str
-    date: Optional[date]
+    """Model representing an image associated with artwork."""
+    url: Optional[HttpUrl]  # Ensures a valid URL if provided
+    copyright: Optional[str]  # Copyright information
 
 
 class UnifiedArtwork(BaseModel):
-    id: str  # Required
-    accession_number: str  # Required
-    title: str  # Required
-    artist: Artist  # Required
-    date_created: Optional[str]  # TODO, what even are these dates?
-    date_start: Optional[int]  # Optional
-    date_end: Optional[int]  # Optional
-    medium: Optional[str]  # Optional
-    dimensions: List[Dimension] = []  # Defaults to an empty list if missing
-    credit_line: Optional[str] = None  # TODO: who cares about this? Optional, defaults to None
-    department: Optional[str] = None  # Optional, defaults to None
-    classification: Optional[str] = None
-    object_type: Optional[str] = None
-    culture: Optional[str] = None
-    period: Optional[str] = None
-    dynasty: Optional[str] = None
-    provenance: List[Provenance] = []  # Defaults to an empty list if missing
-    description: Optional[str] = None
-    exhibition_history: Optional[str] = None
-    bibliography: Optional[str] = None
-    images: List[Image] = []  # Defaults to an empty list if missing
-    is_public_domain: bool = False  # Defaults to False if missing
-    rights_and_reproduction: Optional[str] = None
-    location: Optional[ArtworkLocation] = None
-    url: Optional[str] = None
-
-    source_museum: str  # Required
-    original_metadata: dict = Field(default_factory=dict)  # Defaults to an empty dict
-
-
-    class Config:
-        allow_population_by_field_name = True
+    """Model representing a unified artwork."""
+    id: str  # Unique identifier
+    museum: Museum  # Museum where the artwork is located
+    object: ArtObject  # Art object information
+    artist: Artist  # Artist information
+    images: list[Image]  # List of images associated with the artwork
+    web_url: Optional[HttpUrl]  # URL for viewing the artwork online
+    metadata: dict  # Store all additional metadata as a dictionary (headers as keys, values as values for CSV)
