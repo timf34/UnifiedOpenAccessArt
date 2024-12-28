@@ -62,13 +62,13 @@ def parse_moma_artist(raw_val: Any, row: pd.Series) -> Artist:
     Parse MOMA's artist information from multiple columns:
     - Artist (name)
     - ArtistBio (contains nationality and life dates in parentheses)
-    - BeginDate/EndDate (birth/death years, negative for BCE)
+    - BeginDate/EndDate (birth/death years with parentheses)
 
     Examples:
     Artist: "Otto Wagner"
     ArtistBio: "(Austrian, 1841–1918)"
-    BeginDate: -1841
-    EndDate: -1918
+    BeginDate: "(1841)"
+    EndDate: "(1918)"
     """
     if not raw_val or pd.isna(raw_val):
         return Artist(name="Unknown Artist", birth_year=None, death_year=None)
@@ -77,20 +77,28 @@ def parse_moma_artist(raw_val: Any, row: pd.Series) -> Artist:
     name = str(raw_val).strip()
 
     # Extract birth and death years from BeginDate/EndDate
-    # Note: MOMA uses negative years, we need to convert to positive
-    birth_year = row.get('BeginDate')
-    death_year = row.get('EndDate')
+    birth_year = None
+    death_year = None
 
-    # Convert negative years to positive integers
-    if birth_year and pd.notna(birth_year):
-        birth_year = abs(int(birth_year))
-    else:
-        birth_year = None
+    try:
+        begin_date = row.get('BeginDate')
+        if begin_date and pd.notna(begin_date):
+            # Extract number from parentheses
+            year_match = re.search(r'\((\d{4})\)', str(begin_date))
+            if year_match:
+                birth_year = int(year_match.group(1))
+    except (ValueError, TypeError):
+        pass
 
-    if death_year and pd.notna(death_year) and int(death_year) != 0:
-        death_year = abs(int(death_year))
-    else:
-        death_year = None
+    try:
+        end_date = row.get('EndDate')
+        if end_date and pd.notna(end_date):
+            # Extract number from parentheses
+            year_match = re.search(r'\((\d{4})\)', str(end_date))
+            if year_match:
+                death_year = int(year_match.group(1))
+    except (ValueError, TypeError):
+        pass
 
     return Artist(
         name=name,
