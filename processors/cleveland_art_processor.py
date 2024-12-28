@@ -6,7 +6,7 @@ from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import DateInfo, DateType, Artist, Image
 
 
-def parse_date(raw_val: Any) -> DateInfo:
+def parse_date(raw_val: Any, row: pd.Series) -> DateInfo:
     """
     Example date parser for Cleveland:
     - raw_val might be '1902'
@@ -22,7 +22,7 @@ def parse_date(raw_val: Any) -> DateInfo:
         return DateInfo(type=DateType.UNKNOWN, display_text=str(raw_val), start_year=None, end_year=None)
 
 
-def parse_creators(raw_val: Any) -> Artist:
+def parse_creators(raw_val: Any, row: pd.Series) -> Artist:
     """
     Example for Cleveland's 'creators' field, returning an Artist object.
     """
@@ -34,7 +34,8 @@ def parse_creators(raw_val: Any) -> Artist:
     main_creator = re.sub(r'\([^)]*\)', '', main_creator).strip()
     return Artist(name=main_creator, birth_year=None, death_year=None)
 
-def parse_images(raw_val: Any) -> list[Image]:
+
+def parse_images(raw_val: Any, row: pd.Series) -> list[Image]:
     """
     Cleveland has 3 columns: image_web, image_print, image_full
     But here, each column is separate so we might just parse them individually.
@@ -62,7 +63,6 @@ class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
         "creators": {"parse": parse_creators, "model": "artist"},
         "image_web": {"parse": parse_images, "model": "images"},
         "image_print": {"parse": parse_images, "model": "images"},
-        "image_full": {"parse": parse_images, "model": "images"},
         "url": {"model": "web_url"},
     }
 
