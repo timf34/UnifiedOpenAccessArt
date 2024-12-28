@@ -1,204 +1,177 @@
-"""Carnegie Museum of Art"""
 import pandas as pd
-from typing import List, Optional
+import re
+from typing import Any, Optional
 
 from processors.base_processor import BaseMuseumDataProcessor
-from models.data_models import UnifiedArtwork, Artist, Dimension, Image, ArtworkLocation
+from models.data_models import (
+    DateInfo,
+    DateType,
+    Artist,
+    Image,
+    UnifiedArtwork,
+    ArtObject,
+    Museum
+)
 
 
-class CMOADataProcessor(BaseMuseumDataProcessor):
+def parse_cmoa_date(raw_val: Any, row: pd.Series) -> DateInfo:
+    """
+    Parse CMOA's date fields into a DateInfo object.
+
+    The CSV provides:
+      - creation_date (text like "1964-1965", "1999", "1984", etc.)
+      - creation_date_earliest ("01/01/1964")
+      - creation_date_latest ("01/01/1965")
+
+    Strategy:
+      1) If earliest == latest, treat as a single year (if parseable).
+      2) Else, treat it as a range between earliest and latest years.
+      3) If unparseable, fallback to UNKNOWN.
+
+    We’re ignoring BCE in this example, but you can enhance if needed.
+    """
+    date_text = str(raw_val).strip()
+    earliest = str(row.get("creation_date_earliest", "")).strip()
+    latest = str(row.get("creation_date_latest", "")).strip()
+
+    # Attempt to parse out just the year (last 4 digits) if date looks like mm/dd/yyyy
+    def extract_year(yyyymmdd: str) -> Optional[int]:
+        match = re.search(r'(\d{4})$', yyyymmdd)
+        if match:
+            return int(match.group(1))
+        return None
+
+    start_year = extract_year(earliest)
+    end_year = extract_year(latest)
+
+    # If no year info is found, mark as UNKNOWN
+    if not start_year and not end_year:
+        return DateInfo(
+            type=DateType.UNKNOWN,
+            display_text=date_text,
+            start_year=None,
+            end_year=None,
+            is_bce=False
+        )
+
+    # If earliest and latest are the same, treat as single year
+    if start_year and end_year and start_year == end_year:
+        return DateInfo(
+            type=DateType.YEAR,
+            display_text=date_text,
+            start_year=start_year,
+            end_year=end_year,
+            is_bce=False
+        )
+
+    # Otherwise, we have a range
+    if start_year and end_year:
+        # Ensure start <= end for CE
+        # If out of order, swap or handle appropriately
+        if end_year < start_year:
+            start_year, end_year = end_year, start_year
+
+        return DateInfo(
+            type=DateType.YEAR_RANGE,
+            display_text=date_text,
+            start_year=start_year,
+            end_year=end_year,
+            is_bce=False
+        )
+
+    # If we only have one boundary, treat as a single year
+    the_year = start_year or end_year
+    return DateInfo(
+        type=DateType.YEAR,
+        display_text=date_text,
+        start_year=the_year,
+        end_year=the_year,
+        is_bce=False
+    )
+
+
+def parse_cmoa_artist(raw_val: Any, row: pd.Series) -> Artist:
+    """
+    Parse artist info from multiple columns:
+      - full_name (string)
+      - birth_date / death_date (like '01/01/1947')
+
+    We’ll extract the 4-digit year from those date strings for birth_year and death_year.
+    If parsing fails or columns are missing, fall back to defaults.
+    """
+    full_name = str(row.get("full_name", "Unknown Artist")).strip()
+    birth_date_str = str(row.get("birth_date", "")).strip()
+    death_date_str = str(row.get("death_date", "")).strip()
+
+    # Simple helper to extract the year from something like "01/01/1947"
+    def extract_year(date_str: str) -> Optional[int]:
+        match = re.search(r'(\d{4})$', date_str)
+        if match:
+            return int(match.group(1))
+        return None
+
+    birth_year = extract_year(birth_date_str)
+    death_year = extract_year(death_date_str)
+
+    return Artist(
+        name=full_name if full_name else "Unknown Artist",
+        birth_year=birth_year,
+        death_year=death_year
+    )
+
+
+def parse_cmoa_images(raw_val: Any, row: pd.Series) -> list[Image]:
+    """
+    The CSV has a single 'image_url' column. We convert it to our standard list[Image].
+    """
+    if not raw_val or pd.isna(raw_val):
+        return []
+    return [Image(url=str(raw_val).strip(), copyright=None)]
+
+
+class CarnegieMuseumDataProcessor(BaseMuseumDataProcessor):
+    """
+    Processor for Carnegie Museum of Art's open data.
+    """
+
     def load_data(self, file_path: str) -> pd.DataFrame:
-        return pd.read_csv(file_path, encoding='utf-8', nrows=100)  # Temp limiting to 100 rows for testing
+        return pd.read_csv(file_path, encoding='utf-8', low_memory=False)
 
-    def process_data(self, df: pd.DataFrame) -> List[UnifiedArtwork]:
-        unified_data = []
-        for _, row in df.iterrows():
-            try:
-                artwork = self._create_artwork(row)
-                if artwork:
-                    unified_data.append(artwork)
-            except Exception as e:
-                print(f"Error processing row with title '{row.get('title', 'Unknown')}': {str(e)}")
-                continue
-        return unified_data
+    def get_museum_name(self) -> str:
+        return "Carnegie Museum of Art"
 
-    def _create_artwork(self, row: pd.Series) -> Optional[UnifiedArtwork]:
-        """Create a UnifiedArtwork object from a row of CMOA data."""
-        if pd.isna(row['title']):
-            return None
+    # Define how columns map to our UnifiedArtwork model
+    column_map = {
+        "id": {"model": "id"},
+        "title": {"model": "object.name"},
+        "creation_date": {"parse": parse_cmoa_date, "model": "object.creation_date"},
+        # Treat 'medium' as our 'object.type'
+        "medium": {"model": "object.type"},
+        # URL to a single image
+        "image_url": {"parse": parse_cmoa_images, "model": "images"},
+        # Artist
+        "full_name": {"parse": parse_cmoa_artist, "model": "artist"},
+        # Use the museum’s web_url for artwork display
+        "web_url": {"model": "web_url"},
+    }
 
-        artist = self._parse_artist_info(row)
-        dimensions = self._parse_dimensions(row)
-        start_date, end_date = self._parse_dates(row)
-
-        location = ArtworkLocation(
-            gallery=None,
-            room=None,
-            wall=None,
-            current_location=row['physical_location'] if pd.notna(row['physical_location']) else None
-        )
-
-        images = []
-        if pd.notna(row['image_url']):
-            images.append(Image(
-                url=row['image_url'],
-                copyright=None,
-                type="primary"
-            ))
-
-        if pd.notna(row['web_url']):
-            images.append(Image(
-                url=row['web_url'],
-                copyright=None,
-                type="web"
-            ))
-
-        return UnifiedArtwork(
-            id=str(row['id']),
-            accession_number=str(row['accession_number']),
-            title=row['title'],
-            artist=artist,
-            date_created=row['creation_date'] if pd.notna(row['creation_date']) else None,
-            date_start=start_date,
-            date_end=end_date,
-            medium=row['medium'] if pd.notna(row['medium']) else None,
-            dimensions=dimensions,
-            credit_line=row['credit_line'] if pd.notna(row['credit_line']) else None,
-            department=row['department'] if pd.notna(row['department']) else None,
-            classification=row['classification'] if pd.notna(row['classification']) else None,
-            object_type=None,  # Not directly provided in the data
-            culture=None,  # Not provided in the data
-            period=None,
-            dynasty=None,
-            provenance=[],  # Could parse provenance_text if needed
-            description=None,
-            exhibition_history=None,
-            bibliography=None,
-            images=images,
-            is_public_domain=True,  # Assuming open access
-            rights_and_reproduction=None,
-            location=location,
-            url=row['web_url'] if pd.notna(row['web_url']) else None,
-            source_museum="Carnegie Museum of Art",
-            original_metadata=row.to_dict()
-        )
-
-    def _parse_artist_info(self, row: pd.Series) -> Artist:
-        """Parse artist information from multiple fields."""
-        name = None
-        if pd.notna(row['cited_name']):
-            name = row['cited_name']
-        elif pd.notna(row['full_name']):
-            name = row['full_name']
-
-        if not name:
-            return Artist(
-                name="Unknown",
-                birth_date=None,
-                death_date=None,
-                nationality=None,
-                biography=None,
-                role=None
-            )
-
-        # Parse birth and death dates
-        birth_date = None
-        death_date = None
-
-        if pd.notna(row['birth_date']):
-            try:
-                birth_date = str(pd.to_datetime(row['birth_date']).year)
-            except Exception:
-                pass
-
-        if pd.notna(row['death_date']):
-            try:
-                death_date = str(pd.to_datetime(row['death_date']).year)
-            except Exception:
-                pass
-
-        return Artist(
-            name=name,
-            birth_date=birth_date,
-            death_date=death_date,
-            nationality=row['nationality'] if pd.notna(row['nationality']) else None,
-            biography=None,
-            role=row['role'] if pd.notna(row['role']) else None
-        )
-
-    def _parse_dates(self, row: pd.Series) -> tuple[Optional[int], Optional[int]]:
-        """Parse start and end dates from various date fields."""
-        start_date = None
-        end_date = None
-
-        # Try to parse earliest and latest dates first
-        if pd.notna(row['creation_date_earliest']):
-            try:
-                start_date = pd.to_datetime(row['creation_date_earliest']).year
-            except Exception:
-                pass
-
-        if pd.notna(row['creation_date_latest']):
-            try:
-                end_date = pd.to_datetime(row['creation_date_latest']).year
-            except Exception:
-                pass
-
-        # If those fail, try to parse from creation_date
-        if pd.notna(row['creation_date']) and not (start_date and end_date):
-            date_str = str(row['creation_date'])
-
-            # Handle range format like "1964-1965"
-            if '-' in date_str:
-                parts = date_str.split('-')
-                try:
-                    start_date = int(parts[0])
-                    end_date = int(parts[1])
-                except (ValueError, IndexError):
-                    pass
-            # Handle single year
-            else:
-                try:
-                    year = int(date_str)
-                    start_date = year
-                    end_date = year
-                except ValueError:
-                    pass
-
-        return start_date, end_date
-
-    def _parse_dimensions(self, row: pd.Series) -> List[Dimension]:
-        """Parse dimensions from individual dimension fields."""
-        dimensions = []
-        dimension_fields = {
-            'item_width': 'width',
-            'item_height': 'height',
-            'item_depth': 'depth',
-            'item_diameter': 'diameter'
-        }
-
-        for field, dim_type in dimension_fields.items():
-            if pd.notna(row[field]) and float(row[field]) > 0:
-                dimensions.append(Dimension(
-                    value=float(row[field]),
-                    unit='inches',  # CMOA typically uses inches
-                    type=dim_type
-                ))
-
-        return dimensions
+    # Any columns we don't want in metadata
+    exclude_from_metadata = {
+        "id",
+        "title",
+        "creation_date",
+        "creation_date_earliest",
+        "creation_date_latest",
+        "medium",
+        "image_url",
+        "full_name",
+        "web_url",
+    }
 
 
-def main():
-    processor = CMOADataProcessor()
-    unified_data = processor.get_unified_data('../data/source_datasets/cmoa.csv')
-
-    # Print first 10 records
-    for artwork in unified_data[:10]:
-        print(artwork)
-        print()
-
-    print(f"Total processed: {len(unified_data)}")
-
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    processor = CarnegieMuseumDataProcessor()
+    data = processor.get_unified_data("../data/source_datasets/cmoa.csv")
+    print(f"Processed {len(data)} artworks from CMOA.")
+    for artwork in data[:3]:
+        print(artwork.dict())
