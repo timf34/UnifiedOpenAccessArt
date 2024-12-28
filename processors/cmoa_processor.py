@@ -14,6 +14,20 @@ from models.data_models import (
 )
 
 
+# Attempt to parse out just the year from either yyyy-mm-dd or mm/dd/yyyy format
+def extract_year(date_str: str) -> Optional[int]:
+    # Try yyyy-mm-dd format first
+    match = re.search(r'^(\d{4})', date_str)
+    if match:
+        return int(match.group(1))
+    # Try mm/dd/yyyy format
+    match = re.search(r'(\d{4})$', date_str)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+
 def parse_cmoa_date(raw_val: Any, row: pd.Series) -> DateInfo:
     """
     Parse CMOA's date fields into a DateInfo object.
@@ -34,12 +48,24 @@ def parse_cmoa_date(raw_val: Any, row: pd.Series) -> DateInfo:
     earliest = str(row.get("creation_date_earliest", "")).strip()
     latest = str(row.get("creation_date_latest", "")).strip()
 
-    # Attempt to parse out just the year (last 4 digits) if date looks like mm/dd/yyyy
-    def extract_year(yyyymmdd: str) -> Optional[int]:
-        match = re.search(r'(\d{4})$', yyyymmdd)
+    # Also try to extract year from plain creation_date if it's just a year
+    def extract_plain_year(date_str: str) -> Optional[int]:
+        match = re.search(r'^(\d{4})$', date_str)
         if match:
             return int(match.group(1))
         return None
+
+    # First try to get year from plain creation_date if earliest/latest not available
+    if not earliest or not latest:
+        plain_year = extract_plain_year(date_text)
+        if plain_year:
+            return DateInfo(
+                type=DateType.YEAR,
+                display_text=date_text,
+                start_year=plain_year,
+                end_year=plain_year,
+                is_bce=False
+            )
 
     start_year = extract_year(earliest)
     end_year = extract_year(latest)
@@ -102,13 +128,6 @@ def parse_cmoa_artist(raw_val: Any, row: pd.Series) -> Artist:
     full_name = str(row.get("full_name", "Unknown Artist")).strip()
     birth_date_str = str(row.get("birth_date", "")).strip()
     death_date_str = str(row.get("death_date", "")).strip()
-
-    # Simple helper to extract the year from something like "01/01/1947"
-    def extract_year(date_str: str) -> Optional[int]:
-        match = re.search(r'(\d{4})$', date_str)
-        if match:
-            return int(match.group(1))
-        return None
 
     birth_year = extract_year(birth_date_str)
     death_year = extract_year(death_date_str)
