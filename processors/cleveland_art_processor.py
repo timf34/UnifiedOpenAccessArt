@@ -28,7 +28,7 @@ class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
         return UnifiedArtwork(
             id=str(row.get('id', '')),
             accession_number=str(row.get('accession_number', '')),
-            title=str(row.get('title', '')),
+            title=str(row.get('title', 'Untitled')),  # Fallback to 'Untitled' if missing
             artist=self._parse_artist(row),
             date_created=row.get('creation_date'),
             date_start=self._parse_year(row.get('creation_date_earliest')),
@@ -39,16 +39,16 @@ class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
             department=row.get('department'),
             classification=row.get('classification'),
             object_type=row.get('classification'),  # Using classification as object_type
-            culture=None,  # Not available in sample data
-            period=None,
-            dynasty=None,
+            culture=row.get('culture'),  # Optional
+            period=row.get('period'),  # Optional
+            dynasty=row.get('dynasty'),  # Optional
             provenance=self._parse_provenance(row.get('provenance_text', '')),
-            description=None,  # Not available in sample data
-            exhibition_history=None,  # Not available in sample data
-            bibliography=None,  # Not available in sample data
+            description=row.get('description'),
+            exhibition_history=row.get('exhibition_history'),
+            bibliography=row.get('bibliography'),
             images=self._parse_images(row),
-            is_public_domain=False,  # Not specified in sample data
-            rights_and_reproduction=None,  # Not available in sample data
+            is_public_domain=bool(row.get('is_public_domain', False)),  # Defaults to False
+            rights_and_reproduction=row.get('rights_and_reproduction'),
             location=self._parse_location(row),
             url=row.get('web_url'),
             source_museum="Cleveland Museum of Art",
@@ -112,15 +112,58 @@ class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
         return provenance_entries
 
     def _parse_artist(self, row: pd.Series) -> Artist:
-        """Parse artist information from multiple fields."""
-        return Artist(
-            name=row.get('full_name', ''),
-            birth_date=self._parse_year(row.get('birth_date')),
-            death_date=self._parse_year(row.get('death_date')),
-            nationality=row.get('nationality'),
-            biography=None,
-            role=row.get('role')
-        )
+        """Parse artist information from the 'creators' column."""
+        creators = row.get('creators', '')
+        if not creators or pd.isna(creators):
+            return Artist(
+                name='Unknown',
+                birth_date=None,
+                death_date=None,
+                nationality=None,
+                biography=None,
+                role=None
+            )
+
+        # Split by parentheses to extract the main parts
+        try:
+            name_part, details_part = creators.split('(', 1)
+            name = name_part.strip().lower()
+
+            # Further split the details part to extract nationality, dates, and role
+            details_part = details_part.strip(')')
+            details = details_part.split(',')
+            nationality = details[0].strip() if len(details) > 0 else None
+
+            # Extract birth and death years
+            date_part = details[1].strip() if len(details) > 1 else None
+            birth_year, death_year = None, None
+            if date_part and '-' in date_part:
+                birth_year, death_year = date_part.split('-')
+                birth_year = int(birth_year.strip()) if birth_year.strip().isdigit() else None
+                death_year = int(death_year.strip()) if death_year.strip().isdigit() else None
+
+            # Extract role (e.g., "artist", "sculptor") if it exists
+            role = details[2].strip() if len(details) > 2 else None
+
+            return Artist(
+                name=name,
+                birth_date=birth_year,
+                death_date=death_year,
+                nationality=nationality,
+                biography=None,
+                role=role
+            )
+
+        except ValueError:
+            # In case of unexpected format, return a fallback
+            return Artist(
+                name=creators.lower(),
+                birth_date=None,
+                death_date=None,
+                nationality=None,
+                biography=None,
+                role=None
+            )
 
     def _parse_images(self, row: pd.Series) -> List[Image]:
         """Parse image information."""

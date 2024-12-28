@@ -1,7 +1,7 @@
 """
 When flattening this to a CSV file, we'll need to flatten the nested fields.
 
-TODO: have a musem field and date of museum dataset
+TODO: have a museum field and date of museum dataset
 """
 
 from typing import List, Optional
@@ -43,35 +43,35 @@ class Provenance(BaseModel):
 
 
 class UnifiedArtwork(BaseModel):
-    id: str
-    accession_number: str
-    title: str
-    artist: Artist
-    date_created: Optional[str]
-    date_start: Optional[int]
-    date_end: Optional[int]
-    medium: Optional[str]
-    dimensions: List[Dimension]
-    credit_line: Optional[str]
-    department: Optional[str]
-    classification: Optional[str]
-    object_type: Optional[str]
-    culture: Optional[str]
-    period: Optional[str]
-    dynasty: Optional[str]
-    provenance: List[Provenance] = []
-    description: Optional[str]
-    exhibition_history: Optional[str]
-    bibliography: Optional[str]
-    images: List[Image] = []
-    is_public_domain: bool = False
-    rights_and_reproduction: Optional[str]
-    location: Optional[ArtworkLocation]
-    url: Optional[str]
+    id: str  # Required
+    accession_number: str  # Required
+    title: str  # Required
+    artist: Artist  # Required
+    date_created: Optional[str]  # TODO, what even are these dates?
+    date_start: Optional[int]  # Optional
+    date_end: Optional[int]  # Optional
+    medium: Optional[str]  # Optional
+    dimensions: List[Dimension] = []  # Defaults to an empty list if missing
+    credit_line: Optional[str] = None  # TODO: who cares about this? Optional, defaults to None
+    department: Optional[str] = None  # Optional, defaults to None
+    classification: Optional[str] = None
+    object_type: Optional[str] = None
+    culture: Optional[str] = None
+    period: Optional[str] = None
+    dynasty: Optional[str] = None
+    provenance: List[Provenance] = []  # Defaults to an empty list if missing
+    description: Optional[str] = None
+    exhibition_history: Optional[str] = None
+    bibliography: Optional[str] = None
+    images: List[Image] = []  # Defaults to an empty list if missing
+    is_public_domain: bool = False  # Defaults to False if missing
+    rights_and_reproduction: Optional[str] = None
+    location: Optional[ArtworkLocation] = None
+    url: Optional[str] = None
 
-    # Museum-specific fields
-    source_museum: str
-    original_metadata: dict = Field(default_factory=dict)
+    source_museum: str  # Required
+    original_metadata: dict = Field(default_factory=dict)  # Defaults to an empty dict
+
 
     class Config:
         allow_population_by_field_name = True
