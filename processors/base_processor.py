@@ -23,6 +23,9 @@ class BaseMuseumDataProcessor(ABC):
     is mapped or parsed into the UnifiedArtwork model.
     """
 
+    # Number of rows to load in dev mode
+    DEV_MODE_ROWS = 100
+
     # Define a basic structure for the column map:
     # {
     #   "id": { "model": "id" },
@@ -42,7 +45,7 @@ class BaseMuseumDataProcessor(ABC):
     exclude_from_metadata: Set[str] = set()
 
     @abstractmethod
-    def load_data(self, file_path: str) -> pd.DataFrame:
+    def load_data(self, file_path: str, dev_mode: bool = False) -> pd.DataFrame:
         pass
 
     @abstractmethod
@@ -62,8 +65,8 @@ class BaseMuseumDataProcessor(ABC):
                 logging.error(f"Error processing row {row.get('id', index)}: {e}")
         return artworks
 
-    def get_unified_data(self, file_path: str) -> List[UnifiedArtwork]:
-        df = self.load_data(file_path)
+    def get_unified_data(self, file_path: str, dev_mode: bool = False) -> List[UnifiedArtwork]:
+        df = self.load_data(file_path, dev_mode)
         return self.process_data(df)
 
     # -----------------------------------------------------------------
