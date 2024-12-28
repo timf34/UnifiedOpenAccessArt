@@ -1,5 +1,6 @@
+import logging
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Callable, Optional, Set
+from typing import List, Dict, Any, Optional, Set
 import pandas as pd
 
 from models.data_models import (
@@ -11,6 +12,9 @@ from models.data_models import (
     DateInfo,
     DateType
 )
+
+# Configure logging
+logging.basicConfig(level=logging.ERROR, format='%(levelname)s: %(message)s')
 
 
 class BaseMuseumDataProcessor(ABC):
@@ -37,7 +41,6 @@ class BaseMuseumDataProcessor(ABC):
     # If you have columns you *never* want in metadata, place them here
     exclude_from_metadata: Set[str] = set()
 
-    # Child classes typically override
     @abstractmethod
     def load_data(self, file_path: str) -> pd.DataFrame:
         pass
@@ -51,12 +54,12 @@ class BaseMuseumDataProcessor(ABC):
         Convert the DataFrame into a list of UnifiedArtwork objects.
         """
         artworks = []
-        for _, row in df.iterrows():
+        for index, row in df.iterrows():
             try:
-                artwork = self._row_to_artwork(row)
+                artwork = self._row_to_artwork(row, index)
                 artworks.append(artwork)
             except Exception as e:
-                print(f"Error processing row {row.get('id', 'unknown')}: {e}")
+                logging.error(f"Error processing row {row.get('id', index)}: {e}")
         return artworks
 
     def get_unified_data(self, file_path: str) -> List[UnifiedArtwork]:
@@ -66,13 +69,13 @@ class BaseMuseumDataProcessor(ABC):
     # -----------------------------------------------------------------
     # Core row -> UnifiedArtwork logic
     # -----------------------------------------------------------------
-    def _row_to_artwork(self, row: pd.Series) -> UnifiedArtwork:
+    def _row_to_artwork(self, row: pd.Series, index) -> UnifiedArtwork:
         """
         Create a UnifiedArtwork from a single row using column_map, plus fallback logic.
         """
         # Start with a new instance (we’ll fill it in piecewise)
         artwork = UnifiedArtwork(
-            id="",  # we will fill
+            id="",
             museum=Museum(name=self.get_museum_name()),
             object=ArtObject(name="", creation_date=None, type=None),
             artist=Artist(name="Unknown Artist", birth_year=None, death_year=None),
@@ -83,29 +86,44 @@ class BaseMuseumDataProcessor(ABC):
 
         # 1. Apply the column_map to fill fields
         used_columns = set()
+
         for col_name, config in self.column_map.items():
             if col_name not in row or pd.isna(row[col_name]):
+                logging.debug(f"Row {index}: Skipping column '{col_name}' (missing or NaN).")
                 continue
 
             raw_val = row[col_name]
             used_columns.add(col_name)
 
-            # If there's a parse function, call it
+            # Parse if necessary
             if "parse" in config and callable(config["parse"]):
-                parsed_val = config["parse"](raw_val, row)
+                try:
+                    parsed_val = config["parse"](raw_val, row)
+                    logging.debug(f"Row {index}: Parsed column '{col_name}' value '{raw_val}' to '{parsed_val}'.")
+                except Exception as e:
+                    logging.error(f"Row {index}: Failed to parse column '{col_name}' with value '{raw_val}': {e}")
+                    continue
             else:
                 parsed_val = raw_val
+                logging.debug(f"Row {index}: Using raw column '{col_name}' value '{raw_val}'.")
 
             # If there's a "model" path, set that field
             if "model" in config:
-                self._set_model_field(artwork, config["model"], parsed_val)
+                try:
+                    self._set_model_field(artwork, config["model"], parsed_val)
+                    logging.debug(f"Row {index}: Set '{config['model']}' to '{parsed_val}'.")
+                except Exception as e:
+                    logging.error(f"Row {index}: Failed to set field '{config['model']}' with value '{parsed_val}': {e}")
+                    continue
 
         # 2. Fill metadata with leftover columns
         artwork.metadata = self._create_metadata(row, used_columns)
+        logging.debug(f"Row {index}: Metadata extracted: {artwork.metadata}")
 
         # 3. If the ID is still empty, try a default from row['id']
         if not artwork.id and "id" in row and pd.notna(row["id"]):
             artwork.id = str(row["id"])
+            logging.debug(f"Row {index}: Fallback ID set to '{artwork.id}'.")
 
         return artwork
 
@@ -132,5 +150,5 @@ class BaseMuseumDataProcessor(ABC):
                 val = row[col]
                 if pd.notna(val):
                     metadata[col] = val
+                    logging.debug(f"Row {row.name}: Added '{col}': '{val}' to metadata.")
         return metadata
-
