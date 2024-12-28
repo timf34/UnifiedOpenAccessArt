@@ -11,8 +11,9 @@ I encourage you to build something cool with this data! And if you do, please le
 - [x] Cleveland Museum of Art
 - [x] CMOA
   - _However, we need to manually adjust/ update the URLs!_
-- [] The MOMA
+- [x] The MOMA
 - [] National Gallery of Art (DC)
+  - _In progress_
 - [] Penn Museum 
 - [] QAGOMA
 - [] Rijksmuseum
