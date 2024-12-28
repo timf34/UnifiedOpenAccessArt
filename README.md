@@ -6,6 +6,17 @@ Aggregating Open Access datasets from the world's top art museums into a unified
 
 I encourage you to build something cool with this data! And if you do, please let me know, I'd love to see it!
 
+## Processors updated 
+
+- [x] Cleveland Museum of Art
+- [] CMOA
+- [] The MOMA
+- [] National Gallery of Art (DC)
+- [] Penn Museum 
+- [] QAGOMA
+- [] Rijksmuseum
+- [] Tate
+
 ## Museums Datasets Downloaded 
 
 [x] mark if they're processed 
