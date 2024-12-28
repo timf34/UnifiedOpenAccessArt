@@ -1,3 +1,8 @@
+"""
+Note: it took about 3 hours to write this and get it working 100% correctly.
+The rest should be easier!
+"""
+
 import pandas as pd
 import re
 from typing import Any
@@ -97,10 +102,10 @@ def parse_creators(raw_val: Any, row: pd.Series) -> Artist:
     """
     if not raw_val or pd.isna(raw_val):
         return Artist(name="Unknown Artist", birth_year=None, death_year=None)
-    
+
     # Just take the first part before semicolon or comma if multiple creators
     main_creator = re.split(r';|,\s*(?:artist|painter|sculptor)', str(raw_val))[0].strip()
-    
+
     # Try to extract birth and death years
     birth_year = None
     death_year = None
@@ -108,10 +113,10 @@ def parse_creators(raw_val: Any, row: pd.Series) -> Artist:
     if years_match:
         birth_year = int(years_match.group(1))
         death_year = int(years_match.group(2))
-    
+
     # Extract name by removing everything in parentheses and cleaning up
     name = re.sub(r'\([^)]*\)', '', main_creator).strip()
-    
+
     return Artist(name=name, birth_year=birth_year, death_year=death_year)
 
 
