@@ -9,7 +9,8 @@ I encourage you to build something cool with this data! And if you do, please le
 ## Processors updated 
 
 - [x] Cleveland Museum of Art
-- [] CMOA
+- [x] CMOA
+  - _However, we need to manually adjust/ update the URLs!_
 - [] The MOMA
 - [] National Gallery of Art (DC)
 - [] Penn Museum 
