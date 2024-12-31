@@ -1,28 +1,24 @@
 import pandas as pd
-import re
-from typing import Any, Optional
+from typing import Any
 
 from processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import (
     DateInfo,
     DateType,
     Artist,
-    Image,
-    UnifiedArtwork,
-    ArtObject,
-    Museum
+    Image
 )
 
 
 def parse_nga_date(raw_val: Any, row: pd.Series) -> DateInfo:
     """
     Parse NGA date formats into a DateInfo object.
-    Uses displaydate, beginyear, and endyear fields.
+    Uses displaydate for display_text, and beginyear/endyear for actual years.
 
-    Examples:
-    - displaydate: "1430s", beginyear: 1430, endyear: 1440 -> YEAR_RANGE
+    Examples from CSV:
     - displaydate: "c. 1310", beginyear: 1310, endyear: 1310 -> YEAR
     - displaydate: "1333", beginyear: 1333, endyear: 1333 -> YEAR
+    - displaydate: "1430s", beginyear: 1430, endyear: 1440 -> YEAR_RANGE
     """
     display_text = str(raw_val) if pd.notna(raw_val) else ""
     begin_year = row.get('beginyear')
@@ -50,7 +46,7 @@ def parse_nga_date(raw_val: Any, row: pd.Series) -> DateInfo:
         )
 
     # If we have both years and they're different, it's a range
-    if begin_year and end_year and begin_year != end_year:
+    if begin_year is not None and end_year is not None and begin_year != end_year:
         return DateInfo(
             type=DateType.YEAR_RANGE,
             display_text=display_text,
@@ -59,8 +55,8 @@ def parse_nga_date(raw_val: Any, row: pd.Series) -> DateInfo:
         )
 
     # If we have at least one year, use it as a single year
-    year = begin_year or end_year
-    if year:
+    year = begin_year if begin_year is not None else end_year
+    if year is not None:
         return DateInfo(
             type=DateType.YEAR,
             display_text=display_text,
@@ -78,58 +74,25 @@ def parse_nga_date(raw_val: Any, row: pd.Series) -> DateInfo:
 
 def parse_nga_artist(raw_val: Any, row: pd.Series) -> Artist:
     """
-    Parse artist information from attribution fields.
-    Uses both attribution and attributioninverted fields if available.
-
-    The attributioninverted field typically has "Last Name, First Name" format
-    while attribution has "First Name Last Name" format.
-    We'll prefer attributioninverted when available.
+    Parse artist information from attribution field.
+    Returns Artist with just the name, as birth/death years aren't provided.
     """
     if not raw_val or pd.isna(raw_val):
         return Artist(name="Unknown Artist", birth_year=None, death_year=None)
 
-    # Try to get the inverted attribution first (Last Name, First Name format)
-    inverted = row.get('attributioninverted')
-    if inverted and pd.notna(inverted):
-        name = str(inverted).strip()
-    else:
-        name = str(raw_val).strip()
-
-    # Look for years in parentheses at the end of either attribution
-    # For example: "Artist Name (1500-1570)"
-    years_match = re.search(r'\((\d{4})-(\d{4})\)', str(raw_val))
-    birth_year = None
-    death_year = None
-
-    if years_match:
-        try:
-            birth_year = int(years_match.group(1))
-            death_year = int(years_match.group(2))
-        except (ValueError, TypeError):
-            pass
-
     return Artist(
-        name=name,
-        birth_year=birth_year,
-        death_year=death_year
+        name=str(raw_val).strip(),
+        birth_year=None,
+        death_year=None
     )
 
 
 def parse_nga_images(raw_val: Any, row: pd.Series) -> list[Image]:
     """
-    Parse image information from customprinturl.
-    Note: The actual NGA might require constructing image URLs differently
-    or using additional API endpoints. This is a simplified version.
+    Currently no image URLs in the sample data.
+    This is a placeholder for when image data becomes available.
     """
-    if not raw_val or pd.isna(raw_val):
-        return []
-
-    url = str(raw_val).strip()
-    if not url:
-        return []
-
-    # Add image with no copyright info (could be enhanced with actual rights info)
-    return [Image(url=url, copyright=None)]
+    return []
 
 
 class NGADataProcessor(BaseMuseumDataProcessor):
@@ -149,10 +112,9 @@ class NGADataProcessor(BaseMuseumDataProcessor):
         "objectid": {"model": "id"},
         "title": {"model": "object.name"},
         "displaydate": {"parse": parse_nga_date, "model": "object.creation_date"},
-        "classification": {"model": "object.type"},
+        "medium": {"model": "object.type"},
         "attribution": {"parse": parse_nga_artist, "model": "artist"},
-        "customprinturl": {"parse": parse_nga_images, "model": "images"},
-        "wikidataid": {"model": "web_url"}  # Using Wikidata ID as a fallback URL
+        "url": {"model": "web_url"}
     }
 
     # Columns to exclude from metadata
@@ -162,11 +124,10 @@ class NGADataProcessor(BaseMuseumDataProcessor):
         "displaydate",
         "beginyear",
         "endyear",
-        "classification",
+        "medium",
         "attribution",
         "attributioninverted",
-        "customprinturl",
-        "wikidataid"
+        "url"
     }
 
 
