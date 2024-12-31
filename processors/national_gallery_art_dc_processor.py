@@ -6,7 +6,8 @@ from models.data_models import (
     DateInfo,
     DateType,
     Artist,
-    Image
+    Image,
+    UnifiedArtwork
 )
 
 
@@ -14,11 +15,6 @@ def parse_nga_date(raw_val: Any, row: pd.Series) -> DateInfo:
     """
     Parse NGA date formats into a DateInfo object.
     Uses displaydate for display_text, and beginyear/endyear for actual years.
-
-    Examples from CSV:
-    - displaydate: "c. 1310", beginyear: 1310, endyear: 1310 -> YEAR
-    - displaydate: "1333", beginyear: 1333, endyear: 1333 -> YEAR
-    - displaydate: "1430s", beginyear: 1430, endyear: 1440 -> YEAR_RANGE
     """
     display_text = str(raw_val) if pd.notna(raw_val) else ""
     begin_year = row.get('beginyear')
@@ -95,6 +91,17 @@ def parse_nga_images(raw_val: Any, row: pd.Series) -> list[Image]:
     return []
 
 
+def parse_nga_web_url(raw_val: Any, row: pd.Series) -> str:
+    """
+    Generate the URL using the objectid. The `raw_val` is not used directly;
+    we rely on row['objectid'] instead.
+    """
+    object_id = row.get("objectid")
+    if pd.notna(object_id):
+        return f"https://www.nga.gov/collection/art-object-page.{object_id}.html"
+    return ""
+
+
 class NGADataProcessor(BaseMuseumDataProcessor):
     """
     Processor for National Gallery of Art (DC) open data.
@@ -114,7 +121,6 @@ class NGADataProcessor(BaseMuseumDataProcessor):
         "displaydate": {"parse": parse_nga_date, "model": "object.creation_date"},
         "medium": {"model": "object.type"},
         "attribution": {"parse": parse_nga_artist, "model": "artist"},
-        "url": {"model": "web_url"}
     }
 
     # Columns to exclude from metadata
@@ -129,6 +135,18 @@ class NGADataProcessor(BaseMuseumDataProcessor):
         "attributioninverted",
         "url"
     }
+
+    # Overriding
+    def _row_to_artwork(self, row: pd.Series, index) -> UnifiedArtwork:
+        # Let the base processor do the heavy lifting first
+        artwork = super()._row_to_artwork(row, index)
+
+        # Now, create the web_url from objectid, even if 'url' column doesn't exist.
+        object_id = row.get("objectid")
+        if pd.notna(object_id):
+            artwork.web_url = f"https://www.nga.gov/collection/art-object-page.{object_id}.html"
+
+        return artwork
 
 
 if __name__ == "__main__":
