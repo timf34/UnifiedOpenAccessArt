@@ -12,8 +12,8 @@ I encourage you to build something cool with this data! And if you do, please le
 - [x] CMOA
   - _However, we need to manually adjust/ update the URLs!_
 - [x] The MOMA
-- [] National Gallery of Art (DC)
-  - _In progress_
+- [x] National Gallery of Art (DC)
+  - Note: this doesn't have artist birth and death dates; also I automatically generate and add the artwork URL to the dataset
 - [] Penn Museum 
 - [] QAGOMA
 - [] Rijksmuseum
