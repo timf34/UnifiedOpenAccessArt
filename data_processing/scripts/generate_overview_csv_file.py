@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-DATA_DIR: str = "../data/source_datasets"  # Specify your directory path here
-OUTPUT_FILE: str = "../data/overview.csv"  # Output file for the overview
+DATA_DIR: str = "../../data/source_datasets"  # Specify your directory path here
+OUTPUT_FILE: str = "../../data/overview.csv"  # Output file for the overview
 
 
 def write_overview_to_csv(directory_path, output_file):

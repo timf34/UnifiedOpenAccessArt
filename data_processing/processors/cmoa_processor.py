@@ -196,7 +196,7 @@ class CarnegieMuseumDataProcessor(BaseMuseumDataProcessor):
 
 if __name__ == "__main__":
     processor = CarnegieMuseumDataProcessor()
-    data = processor.get_unified_data("../data/source_datasets/cmoa.csv")
+    data = processor.get_unified_data("../../data/source_datasets/cmoa.csv")
     print(f"Processed {len(data)} artworks from CMOA.")
     for artwork in data[:3]:
         print(artwork.dict())

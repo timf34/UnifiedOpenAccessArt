@@ -151,7 +151,7 @@ class NGADataProcessor(BaseMuseumDataProcessor):
 
 if __name__ == "__main__":
     processor = NGADataProcessor()
-    data = processor.get_unified_data("../data/source_datasets/national_gallery_of_art_dc.csv", dev_mode=True)
+    data = processor.get_unified_data("../../data/source_datasets/national_gallery_of_art_dc.csv", dev_mode=True)
     print(f"Processed {len(data)} artworks from NGA.")
     for artwork in data[:3]:
         print(artwork.dict())

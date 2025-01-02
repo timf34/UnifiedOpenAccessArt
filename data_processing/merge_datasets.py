@@ -99,13 +99,13 @@ class SimpleMerger:
         df = pd.DataFrame(all_artworks)
 
         # Save to CSV
-        csv_path = Path('data/processed_datasets/unified_art.csv')
+        csv_path = Path('../data/processed_datasets/unified_art.csv')
         csv_path.parent.mkdir(exist_ok=True)
         df.to_csv(csv_path, index=False)
         logger.info(f"Saved {len(df)} artworks to {csv_path}")
 
         # Save to SQLite
-        db_path = Path('data/processed_datasets/unified_art.db')
+        db_path = Path('../data/processed_datasets/unified_art.db')
         self.save_to_sqlite(df, db_path)
         logger.info(f"Saved to SQLite database at {db_path}")
 
@@ -133,7 +133,7 @@ class SimpleMerger:
 
 def main():
     merger = SimpleMerger()
-    merger.process_museums(Path('data/source_datasets'))
+    merger.process_museums(Path('../data/source_datasets'))
 
 
 if __name__ == "__main__":

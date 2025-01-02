@@ -168,7 +168,7 @@ class ClevelandMuseumDataProcessor(BaseMuseumDataProcessor):
 
 if __name__ == "__main__":
     processor = ClevelandMuseumDataProcessor()
-    data = processor.get_unified_data("../data/source_datasets/cleveland_museum_of_art.csv")
+    data = processor.get_unified_data("../../data/source_datasets/cleveland_museum_of_art.csv")
     print(f"Processed {len(data)} artworks.")
     for artwork in data[:3]:
         print(artwork.dict())

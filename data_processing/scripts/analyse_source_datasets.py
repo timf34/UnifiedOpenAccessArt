@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-DATA_DIR: str = "../data/source_datasets"
+DATA_DIR: str = "../../data/source_datasets"
 
 
 def analyse_headers_in_directory(directory_path):

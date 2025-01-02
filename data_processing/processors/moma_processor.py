@@ -161,7 +161,7 @@ class MoMADataProcessor(BaseMuseumDataProcessor):
 
 if __name__ == "__main__":
     processor = MoMADataProcessor()
-    data = processor.get_unified_data("../data/source_datasets/moma.csv", dev_mode=True)
+    data = processor.get_unified_data("../../data/source_datasets/moma.csv", dev_mode=True)
     print(f"Processed {len(data)} artworks from MoMA.")
     for artwork in data[:3]:
         print(artwork.dict())
