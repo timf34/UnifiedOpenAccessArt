@@ -158,8 +158,9 @@ class CarnegieMuseumDataProcessor(BaseMuseumDataProcessor):
     Processor for Carnegie Museum of Art's open data.
     """
 
-    def load_data(self, file_path: str) -> pd.DataFrame:
-        return pd.read_csv(file_path, encoding='utf-8', low_memory=False)
+    def load_data(self, file_path: str, dev_mode: bool = False) -> pd.DataFrame:
+        nrows = self.DEV_MODE_ROWS if dev_mode else None
+        return pd.read_csv(file_path, encoding='utf-8', low_memory=False, nrows=nrows)
 
     def get_museum_name(self) -> str:
         return "Carnegie Museum of Art"
