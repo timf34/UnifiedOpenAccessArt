@@ -140,3 +140,28 @@ def get_artworks(
 
     # Return total + artworks array
     return {"total": total, "artworks": artworks}
+
+
+@app.get("/api/artists")
+def get_artists():
+    """
+    Return a list of all artists and their artwork counts, sorted by name
+    """
+    conn = sqlite3.connect("../data/processed_datasets/unified_art.db")
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT artist_name, COUNT(*) as count 
+        FROM artworks 
+        WHERE artist_name IS NOT NULL 
+        GROUP BY artist_name 
+        ORDER BY artist_name
+    """
+    
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    conn.close()
+    
+    # Convert to list of dicts
+    artists = [{"name": row[0], "count": row[1]} for row in rows]
+    return artists
