@@ -28,6 +28,7 @@ class Artwork(BaseModel):
     date_text: Optional[str] = None
     start_year: Optional[int] = None
     end_year: Optional[int] = None
+    is_bce: bool = False
     url: Optional[str] = None
     image_url: Optional[str] = None
 
@@ -60,8 +61,9 @@ def get_artwork(art_id: str):
         date_text=row[7],
         start_year=row[8],
         end_year=row[9],
-        url=row[10],
-        image_url=row[11],
+        is_bce=row[10],
+        url=row[11],
+        image_url=row[12],
     )
     return artwork
 
@@ -70,11 +72,16 @@ def get_artwork(art_id: str):
 def get_artworks(
     search: Optional[str] = Query(None),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100)
+    limit: int = Query(20, ge=1, le=100),
+    min_year: Optional[int] = Query(None),
+    max_year: Optional[int] = Query(None),
+    min_is_bce: bool = Query(False),
+    max_is_bce: bool = Query(False)
 ):
     """
     Return a paginated list of artworks.
     Optional `search` across title, museum, or artist_name.
+    Optional year range filter with separate BCE flags for start and end years.
     `page` is 1-based; `limit` is how many items per page.
     """
     offset = (page - 1) * limit
@@ -82,18 +89,49 @@ def get_artworks(
     conn = sqlite3.connect("../data/processed_datasets/unified_art.db")
     cursor = conn.cursor()
 
-    # --- Build the WHERE clause (super naive example) ---
+    # --- Build the WHERE clause ---
     conditions = []
     params = []
 
     if search:
-        # Use parameter binding to avoid injection:
-        # We'll match search against 3 columns.
         conditions.append("(title LIKE ? OR museum LIKE ? OR artist_name LIKE ?)")
         for _ in range(3):
             params.append(f"%{search}%")
 
-    # Combine conditions with AND if we had more. But here we have only search or none.
+    if min_year is not None or max_year is not None:
+        year_conditions = []
+        
+        if min_year is not None:
+            if min_is_bce:
+                # For BCE start date
+                year_conditions.extend([
+                    "(is_bce = 1 AND start_year <= ?)",  # BCE dates: larger numbers are earlier
+                ])
+                params.extend([min_year])
+            else:
+                # For CE start date
+                year_conditions.extend([
+                    "((is_bce = 0 AND start_year >= ?) OR (start_year IS NULL AND end_year >= ?))",
+                ])
+                params.extend([min_year, min_year])
+            
+        if max_year is not None:
+            if max_is_bce:
+                # For BCE end date
+                year_conditions.extend([
+                    "(is_bce = 1 AND end_year >= ?)",  # BCE dates: smaller numbers are later
+                ])
+                params.extend([max_year])
+            else:
+                # For CE end date
+                year_conditions.extend([
+                    "((is_bce = 0 AND end_year <= ?) OR (end_year IS NULL AND start_year <= ?))",
+                ])
+                params.extend([max_year, max_year])
+            
+        if year_conditions:
+            conditions.append(f"({' OR '.join(year_conditions)})")  # Use OR to allow BCE to CE ranges
+
     where_clause = ""
     if conditions:
         where_clause = "WHERE " + " AND ".join(conditions)
@@ -134,8 +172,9 @@ def get_artworks(
             date_text=row[7],
             start_year=row[8],
             end_year=row[9],
-            url=row[10],
-            image_url=row[11],
+            is_bce=row[10],
+            url=row[11],
+            image_url=row[12],
         ))
 
     # Return total + artworks array
@@ -219,3 +258,32 @@ def get_time_periods():
     conn.close()
     
     return [{"name": row[0], "count": row[1]} for row in rows]
+
+@app.get("/api/time-range")
+def get_time_range():
+    """
+    Return the minimum and maximum years in the dataset
+    """
+    conn = sqlite3.connect("../data/processed_datasets/unified_art.db")
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT 
+            MIN(CASE 
+                WHEN start_year IS NOT NULL THEN start_year 
+                WHEN end_year IS NOT NULL THEN end_year 
+                END) as min_year,
+            MAX(CASE 
+                WHEN end_year IS NOT NULL THEN end_year
+                WHEN start_year IS NOT NULL THEN start_year 
+                END) as max_year
+        FROM artworks 
+        WHERE start_year IS NOT NULL 
+           OR end_year IS NOT NULL
+    """
+    
+    cursor.execute(query)
+    min_year, max_year = cursor.fetchone()
+    conn.close()
+    
+    return {"min_year": min_year, "max_year": max_year}

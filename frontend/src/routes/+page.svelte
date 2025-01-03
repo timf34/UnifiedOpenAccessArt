@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Gallery from '$lib/Gallery.svelte';
 	import FilterSelect from '$lib/FilterSelect.svelte';
+	import TimeRangeInput from '$lib/TimeRangeInput.svelte';
 
 	let artworks: any[] = [];
 	let total = 0;
@@ -10,7 +11,10 @@
 	let search = '';
 	let selectedArtist = '';
 	let selectedMuseum = '';
-	let selectedPeriod = '';
+	let selectedMinYear: number | null = null;
+	let selectedMaxYear: number | null = null;
+	let selectedMinIsBCE = false;
+	let selectedMaxIsBCE = false;
 
 	let loading = false;
 	let errorMessage = '';
@@ -20,9 +24,25 @@
 	async function loadData() {
 		loading = true;
 		errorMessage = '';
-		const searchTerms = [selectedArtist, selectedMuseum, selectedPeriod, search].filter(Boolean);
+		const searchTerms = [selectedArtist, selectedMuseum, search].filter(Boolean);
 		const searchTerm = searchTerms.join(' ');
-		const url = `${BASE_URL}/api/artworks?search=${encodeURIComponent(searchTerm)}&page=${page}&limit=${limit}`;
+		
+		const params = new URLSearchParams({
+			search: searchTerm,
+			page: page.toString(),
+			limit: limit.toString()
+		});
+
+		if (selectedMinYear !== null) {
+			params.append('min_year', selectedMinYear.toString());
+			params.append('min_is_bce', selectedMinIsBCE.toString());
+		}
+		if (selectedMaxYear !== null) {
+			params.append('max_year', selectedMaxYear.toString());
+			params.append('max_is_bce', selectedMaxIsBCE.toString());
+		}
+
+		const url = `${BASE_URL}/api/artworks?${params.toString()}`;
 
 		try {
 			const res = await fetch(url);
@@ -37,6 +57,25 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	function handleTimeRangeChange(range: { 
+		min: number | null; 
+		max: number | null; 
+		min_is_bce: boolean;
+		max_is_bce: boolean;
+	}) {
+		selectedMinYear = range.min;
+		selectedMaxYear = range.max;
+		selectedMinIsBCE = range.min_is_bce;
+		selectedMaxIsBCE = range.max_is_bce;
+		page = 1;
+		loadData();
+	}
+
+	function formatYear(year: number | null, isBCE: boolean): string {
+		if (year === null) return '';
+		return `${year} ${isBCE ? 'BCE' : 'CE'}`;
 	}
 
 	onMount(() => {
@@ -60,7 +99,6 @@
 	function handleSearch() {
 		selectedArtist = '';
 		selectedMuseum = '';
-		selectedPeriod = '';
 		page = 1;
 		loadData();
 	}
@@ -68,7 +106,6 @@
 	function handleFilterSelect(type: string, value: string) {
 		if (type !== 'artist') selectedArtist = '';
 		if (type !== 'museum') selectedMuseum = '';
-		if (type !== 'period') selectedPeriod = '';
 		
 		switch (type) {
 			case 'artist':
@@ -76,9 +113,6 @@
 				break;
 			case 'museum':
 				selectedMuseum = value;
-				break;
-			case 'period':
-				selectedPeriod = value;
 				break;
 		}
 		
@@ -100,7 +134,7 @@
 
 					<div class="flex flex-col gap-6 w-full">
 						<!-- Filter controls -->
-						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
 							<FilterSelect 
 								endpoint="artists"
 								label="Artists"
@@ -117,15 +151,9 @@
 								onSelect={(value) => handleFilterSelect('museum', value)}
 							/>
 
-							<FilterSelect 
-								endpoint="time-periods"
-								label="Time Periods"
-								placeholder="All Periods"
-								value={selectedPeriod}
-								onSelect={(value) => handleFilterSelect('period', value)}
-							/>
+							<TimeRangeInput onRangeChange={handleTimeRangeChange} />
 
-							<div class="relative w-full">
+							<div class="relative w-full lg:col-span-3">
 								<label class="block text-sm font-medium text-slate-700 mb-1">
 									Search
 								</label>
@@ -152,7 +180,7 @@
 						</div>
 
 						<!-- Active filters -->
-						{#if selectedArtist || selectedMuseum || selectedPeriod}
+						{#if selectedArtist || selectedMuseum || selectedMinYear !== null}
 							<div class="flex flex-wrap gap-2">
 								{#if selectedArtist}
 									<span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
@@ -176,11 +204,17 @@
 										</button>
 									</span>
 								{/if}
-								{#if selectedPeriod}
+								{#if selectedMinYear !== null}
 									<span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
-										Period: {selectedPeriod}
+										Years: {formatYear(selectedMinYear, selectedMinIsBCE)} - {formatYear(selectedMaxYear, selectedMaxIsBCE)}
 										<button
-											on:click={() => handleFilterSelect('period', '')}
+											on:click={() => {
+												selectedMinYear = null;
+												selectedMaxYear = null;
+												selectedMinIsBCE = false;
+												selectedMaxIsBCE = false;
+												loadData();
+											}}
 											class="ml-2 hover:text-blue-900"
 										>
 											×

@@ -30,6 +30,7 @@ class SimpleMerger:
             'date_text': artwork.object.creation_date.display_text if artwork.object.creation_date else None,
             'start_year': artwork.object.creation_date.start_year if artwork.object.creation_date else None,
             'end_year': artwork.object.creation_date.end_year if artwork.object.creation_date else None,
+            'is_bce': artwork.object.creation_date.is_bce if artwork.object.creation_date else False,
             'url': str(artwork.web_url) if artwork.web_url else None,
             'image_url': str(artwork.images[0].url) if artwork.images else None
         }
@@ -47,6 +48,7 @@ class SimpleMerger:
             cursor.execute('CREATE INDEX IF NOT EXISTS idx_museum ON artworks(museum)')
             cursor.execute('CREATE INDEX IF NOT EXISTS idx_artist ON artworks(artist_name)')
             cursor.execute('CREATE INDEX IF NOT EXISTS idx_year ON artworks(start_year)')
+            cursor.execute('CREATE INDEX IF NOT EXISTS idx_is_bce ON artworks(is_bce)')
 
             # Create a few example views for common queries
             cursor.execute('''
@@ -61,6 +63,19 @@ class SimpleMerger:
                 SELECT *
                 FROM artworks
                 WHERE image_url IS NOT NULL
+            ''')
+
+            cursor.execute('''
+                CREATE VIEW IF NOT EXISTS artwork_counts_by_period AS
+                SELECT 
+                    CASE 
+                        WHEN is_bce THEN 'BCE'
+                        ELSE 'CE'
+                    END as era,
+                    COUNT(*) as artwork_count
+                FROM artworks
+                WHERE start_year IS NOT NULL
+                GROUP BY is_bce
             ''')
 
             conn.commit()
