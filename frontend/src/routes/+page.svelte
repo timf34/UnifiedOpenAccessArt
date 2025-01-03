@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Gallery from '$lib/Gallery.svelte';
-	import ArtistSelect from '$lib/ArtistSelect.svelte';
+	import FilterSelect from '$lib/FilterSelect.svelte';
 
 	let artworks: any[] = [];
 	let total = 0;
@@ -9,6 +9,8 @@
 	let limit = 20;
 	let search = '';
 	let selectedArtist = '';
+	let selectedMuseum = '';
+	let selectedPeriod = '';
 
 	let loading = false;
 	let errorMessage = '';
@@ -18,7 +20,8 @@
 	async function loadData() {
 		loading = true;
 		errorMessage = '';
-		const searchTerm = selectedArtist || search;
+		const searchTerms = [selectedArtist, selectedMuseum, selectedPeriod, search].filter(Boolean);
+		const searchTerm = searchTerms.join(' ');
 		const url = `${BASE_URL}/api/artworks?search=${encodeURIComponent(searchTerm)}&page=${page}&limit=${limit}`;
 
 		try {
@@ -55,14 +58,31 @@
 	}
 
 	function handleSearch() {
-		selectedArtist = ''; // Clear artist selection when searching
-		page = 1; // reset to first page
+		selectedArtist = '';
+		selectedMuseum = '';
+		selectedPeriod = '';
+		page = 1;
 		loadData();
 	}
 
-	function handleArtistSelect(artist: string) {
-		selectedArtist = artist;
-		search = ''; // Clear search when selecting artist
+	function handleFilterSelect(type: string, value: string) {
+		if (type !== 'artist') selectedArtist = '';
+		if (type !== 'museum') selectedMuseum = '';
+		if (type !== 'period') selectedPeriod = '';
+		
+		switch (type) {
+			case 'artist':
+				selectedArtist = value;
+				break;
+			case 'museum':
+				selectedMuseum = value;
+				break;
+			case 'period':
+				selectedPeriod = value;
+				break;
+		}
+		
+		search = '';
 		page = 1;
 		loadData();
 	}
@@ -78,35 +98,97 @@
 						Artworks Gallery
 					</h1>
 
-					<div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full">
-						<ArtistSelect 
-							{selectedArtist}
-							onSelect={handleArtistSelect}
-						/>
+					<div class="flex flex-col gap-6 w-full">
+						<!-- Filter controls -->
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+							<FilterSelect 
+								endpoint="artists"
+								label="Artists"
+								placeholder="All Artists"
+								value={selectedArtist}
+								onSelect={(value) => handleFilterSelect('artist', value)}
+							/>
 
-						<div class="hidden sm:block h-8 w-px bg-slate-200 mx-2"></div>
+							<FilterSelect 
+								endpoint="museums"
+								label="Museums"
+								placeholder="All Museums"
+								value={selectedMuseum}
+								onSelect={(value) => handleFilterSelect('museum', value)}
+							/>
 
-						<div class="flex gap-2 items-center flex-1 w-full sm:w-auto">
-							<div class="relative flex-1">
-								<input
-									type="text"
-									bind:value={search}
-									placeholder="Search artworks..."
-									class="w-full pl-4 pr-10 py-2 rounded-lg border border-slate-200 
-										focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
-										placeholder-slate-400 transition-all duration-200"
-								/>
-								<button
-									on:click={handleSearch}
-									class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md
-										text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
-								>
-									<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-									</svg>
-								</button>
+							<FilterSelect 
+								endpoint="time-periods"
+								label="Time Periods"
+								placeholder="All Periods"
+								value={selectedPeriod}
+								onSelect={(value) => handleFilterSelect('period', value)}
+							/>
+
+							<div class="relative w-full">
+								<label class="block text-sm font-medium text-slate-700 mb-1">
+									Search
+								</label>
+								<div class="relative">
+									<input
+										type="text"
+										bind:value={search}
+										placeholder="Search artworks..."
+										class="w-full pl-4 pr-10 py-2 rounded-lg border border-slate-200 
+											focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
+											placeholder-slate-400 transition-all duration-200"
+									/>
+									<button
+										on:click={handleSearch}
+										class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md
+											text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
+									>
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+										</svg>
+									</button>
+								</div>
 							</div>
 						</div>
+
+						<!-- Active filters -->
+						{#if selectedArtist || selectedMuseum || selectedPeriod}
+							<div class="flex flex-wrap gap-2">
+								{#if selectedArtist}
+									<span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
+										Artist: {selectedArtist}
+										<button
+											on:click={() => handleFilterSelect('artist', '')}
+											class="ml-2 hover:text-blue-900"
+										>
+											×
+										</button>
+									</span>
+								{/if}
+								{#if selectedMuseum}
+									<span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
+										Museum: {selectedMuseum}
+										<button
+											on:click={() => handleFilterSelect('museum', '')}
+											class="ml-2 hover:text-blue-900"
+										>
+											×
+										</button>
+									</span>
+								{/if}
+								{#if selectedPeriod}
+									<span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
+										Period: {selectedPeriod}
+										<button
+											on:click={() => handleFilterSelect('period', '')}
+											class="ml-2 hover:text-blue-900"
+										>
+											×
+										</button>
+									</span>
+								{/if}
+							</div>
+						{/if}
 					</div>
 				</div>
 

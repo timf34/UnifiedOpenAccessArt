@@ -165,3 +165,57 @@ def get_artists():
     # Convert to list of dicts
     artists = [{"name": row[0], "count": row[1]} for row in rows]
     return artists
+
+@app.get("/api/museums")
+def get_museums():
+    """
+    Return a list of all museums and their artwork counts, sorted by name
+    """
+    conn = sqlite3.connect("../data/processed_datasets/unified_art.db")
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT museum, COUNT(*) as count 
+        FROM artworks 
+        WHERE museum IS NOT NULL 
+        GROUP BY museum 
+        ORDER BY museum
+    """
+    
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    conn.close()
+    
+    return [{"name": row[0], "count": row[1]} for row in rows]
+
+@app.get("/api/time-periods")
+def get_time_periods():
+    """
+    Return a list of time periods (by century) and their artwork counts
+    """
+    conn = sqlite3.connect("../data/processed_datasets/unified_art.db")
+    cursor = conn.cursor()
+    
+    query = """
+        WITH century_data AS (
+            SELECT 
+                CASE 
+                    WHEN start_year IS NOT NULL THEN ((start_year / 100) + 1) || 'th Century'
+                    WHEN end_year IS NOT NULL THEN ((end_year / 100) + 1) || 'th Century'
+                    ELSE NULL 
+                END as century,
+                COUNT(*) as count
+            FROM artworks 
+            WHERE start_year IS NOT NULL OR end_year IS NOT NULL
+            GROUP BY century
+            HAVING century IS NOT NULL
+            ORDER BY MIN(COALESCE(start_year, end_year))
+        )
+        SELECT century, count FROM century_data
+    """
+    
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    conn.close()
+    
+    return [{"name": row[0], "count": row[1]} for row in rows]
