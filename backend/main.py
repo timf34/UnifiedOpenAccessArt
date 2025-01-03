@@ -1,5 +1,5 @@
 # backend/main.py
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 from typing import List, Optional
@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Example Pydantic model for a single Artwork record
+
 class Artwork(BaseModel):
     id: str
     museum: str
@@ -30,6 +30,40 @@ class Artwork(BaseModel):
     end_year: Optional[int] = None
     url: Optional[str] = None
     image_url: Optional[str] = None
+
+
+@app.get("/api/artworks/{art_id}", response_model=Artwork)
+def get_artwork(art_id: str):
+    """
+    Return a single Artwork by its `id`.
+    Raise 404 if not found.
+    """
+    conn = sqlite3.connect("../data/processed_datasets/unified_art.db")
+    cursor = conn.cursor()
+    # Query by ID:
+    cursor.execute("SELECT * FROM artworks WHERE id = ?", (art_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    if not row:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+
+    # Build Artwork from row
+    artwork = Artwork(
+        id=row[0],
+        museum=row[1],
+        title=row[2],
+        type=row[3],
+        artist_name=row[4],
+        artist_birth=row[5],
+        artist_death=row[6],
+        date_text=row[7],
+        start_year=row[8],
+        end_year=row[9],
+        url=row[10],
+        image_url=row[11],
+    )
+    return artwork
 
 
 @app.get("/api/artworks")

@@ -1,4 +1,3 @@
-// +page.ts
 import type { PageLoad } from './$types';
 import type { Artwork } from '$lib/types';
 
