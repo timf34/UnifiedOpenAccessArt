@@ -1,32 +1,36 @@
+<!-- src/routes/+page.svelte -->
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+	import Gallery from '$lib/Gallery.svelte';  // Import our new component
 
-	// Track local state
 	let artworks: any[] = [];
 	let total = 0;
 
-	let page = 1;   // current page
-	let limit = 5;  // how many items per page
+	// Pagination
+	let page = 1;
+	let limit = 20;
 
+	// Basic loading/error states
 	let loading = false;
 	let errorMessage = '';
 
-    const BASE_URL = 'http://127.0.0.1:8000';
+	// Hardcode or store in env variable
+	const BASE_URL = 'http://127.0.0.1:8000';
 
-	// We'll load data with a function (could also use SvelteKit's load()
-	// in a +page.ts, but here's a straightforward approach).
 	async function loadData() {
 		loading = true;
 		errorMessage = '';
+
+		const url = `${BASE_URL}/api/artworks?page=${page}&limit=${limit}`;
 		try {
-			const res = await fetch(`${BASE_URL}/api/artworks?page=${page}&limit=${limit}`);
+			const res = await fetch(url);
 			if (!res.ok) {
 				throw new Error(`Server responded with ${res.status} ${res.statusText}`);
 			}
 			const data = await res.json();
-			artworks = data.artworks; // array
-			total = data.total;       // total count of rows
+
+			artworks = data.artworks;
+			total = data.total;
 		} catch (err: any) {
 			errorMessage = err.message;
 		} finally {
@@ -34,7 +38,6 @@
 		}
 	}
 
-	// Load first page on mount
 	onMount(() => {
 		loadData();
 	});
@@ -54,32 +57,39 @@
 	}
 </script>
 
-<h1 class="text-2xl font-bold mb-4">Simple Artwork Gallery</h1>
-
-{#if loading}
-	<p>Loading data...</p>
-{:else if errorMessage}
-	<p class="text-red-500">{errorMessage}</p>
-{:else if artworks?.length > 0}
-	<div class="flex flex-col gap-2">
-		{#each artworks as art}
-			<div class="border p-2">
-				<!-- Artwork info -->
-				<h2 class="font-semibold">{art.title}</h2>
-				<p>by {art.artist_name} @ {art.museum}</p>
-				{#if art.image_url}
-					<img src={art.image_url} alt={art.title} style="max-width:200px;" />
-				{/if}
-			</div>
-		{/each}
-	</div>
-
+<!-- Search or heading row (optional) -->
+<div class="p-4 flex items-center justify-between">
+	<h1 class="text-2xl font-bold">Unified Art Gallery</h1>
 	<!-- Pagination controls -->
-	<div class="mt-4">
-		<p>Showing page {page}. Total artworks: {total}.</p>
-		<button on:click={prevPage} disabled={page <= 1}>Previous</button>
-		<button on:click={nextPage} disabled={page * limit >= total}>Next</button>
+	<div class="space-x-2">
+		<button
+				on:click={prevPage}
+				disabled={loading || page <= 1}
+				class="px-3 py-1 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 rounded"
+		>
+			Prev
+		</button>
+		<button
+				on:click={nextPage}
+				disabled={loading || page * limit >= total}
+				class="px-3 py-1 bg-gray-300 hover:bg-gray-400 disabled:bg-gray-200 rounded"
+		>
+			Next
+		</button>
 	</div>
+</div>
+
+<!-- Show errors/Loading states -->
+{#if loading}
+	<p class="p-4">Loading...</p>
+{:else if errorMessage}
+	<p class="p-4 text-red-500">{errorMessage}</p>
 {:else}
-	<p>No artworks found.</p>
+	<Gallery {artworks} />
 {/if}
+
+<!-- Info about pagination -->
+<div class="p-4 text-sm text-gray-600">
+	Page {page} out of {Math.ceil(total / limit)}
+	({total} total artworks)
+</div>
