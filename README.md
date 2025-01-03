@@ -9,6 +9,7 @@ I encourage you to build something cool with this data! And if you do, please le
 ## TODO:
 
 - [ ] Time range filter is not working properly 
+- [ ] See how the backend naturally handles much larger datasets.
 - [ ] Speak with supervisor about the best way to go forward with the project. I'd like to look into really good unstructured data search to make best use of the metadata for the artworks... I think this is the best way to aggregate the data.  
   - Also mention that I would like to finish this thesis as soon as I can as I have a good bit more work now (mention extra workload)
 
