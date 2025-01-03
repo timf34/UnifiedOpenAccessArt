@@ -6,6 +6,13 @@ Aggregating Open Access datasets from the world's top art museums into a unified
 
 I encourage you to build something cool with this data! And if you do, please let me know, I'd love to see it!
 
+## TODO:
+
+- [ ] Time range filter is not working properly 
+- [ ] Speak with supervisor about the best way to go forward with the project. I'd like to look into really good unstructured data search to make best use of the metadata for the artworks... I think this is the best way to aggregate the data.  
+  - Also mention that I would like to finish this thesis as soon as I can as I have a good bit more work now (mention extra workload)
+
+
 ## Processors updated 
 
 - [x] Cleveland Museum of Art
