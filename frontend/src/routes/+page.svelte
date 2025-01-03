@@ -1,34 +1,29 @@
-<!-- src/routes/+page.svelte -->
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Gallery from '$lib/Gallery.svelte';  // Import our new component
+	import Gallery from '$lib/Gallery.svelte';
 
 	let artworks: any[] = [];
 	let total = 0;
-
-	// Pagination
 	let page = 1;
 	let limit = 20;
+	let search = '';
 
-	// Basic loading/error states
 	let loading = false;
 	let errorMessage = '';
 
-	// Hardcode or store in env variable
 	const BASE_URL = 'http://127.0.0.1:8000';
 
 	async function loadData() {
 		loading = true;
 		errorMessage = '';
+		const url = `${BASE_URL}/api/artworks?search=${encodeURIComponent(search)}&page=${page}&limit=${limit}`;
 
-		const url = `${BASE_URL}/api/artworks?page=${page}&limit=${limit}`;
 		try {
 			const res = await fetch(url);
 			if (!res.ok) {
 				throw new Error(`Server responded with ${res.status} ${res.statusText}`);
 			}
 			const data = await res.json();
-
 			artworks = data.artworks;
 			total = data.total;
 		} catch (err: any) {
@@ -55,11 +50,32 @@
 			loadData();
 		}
 	}
+
+	function handleSearch() {
+		page = 1; // reset to first page
+		loadData();
+	}
 </script>
 
-<!-- Search or heading row (optional) -->
 <div class="p-4 flex items-center justify-between">
-	<h1 class="text-2xl font-bold">Unified Art Gallery</h1>
+	<div class="flex gap-2 items-center">
+		<h1 class="text-2xl font-bold">Artworks Gallery</h1>
+
+		<!-- Search input -->
+		<input
+				type="text"
+				bind:value={search}
+				placeholder="Search artworks..."
+				class="border px-2 py-1 rounded"
+		/>
+		<button
+				on:click={handleSearch}
+				class="px-3 py-1 bg-gray-300 hover:bg-gray-400 rounded"
+		>
+			Search
+		</button>
+	</div>
+
 	<!-- Pagination controls -->
 	<div class="space-x-2">
 		<button
@@ -79,7 +95,7 @@
 	</div>
 </div>
 
-<!-- Show errors/Loading states -->
+<!-- States -->
 {#if loading}
 	<p class="p-4">Loading...</p>
 {:else if errorMessage}
@@ -88,7 +104,6 @@
 	<Gallery {artworks} />
 {/if}
 
-<!-- Info about pagination -->
 <div class="p-4 text-sm text-gray-600">
 	Page {page} out of {Math.ceil(total / limit)}
 	({total} total artworks)
