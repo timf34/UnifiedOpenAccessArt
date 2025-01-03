@@ -33,28 +33,42 @@
     onMount(loadArtists);
 </script>
 
-<div class="relative">
-    {#if loading}
-        <div class="absolute right-2 top-1/2 -translate-y-1/2">
-            <div class="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+<div class="relative flex-1 sm:flex-none min-w-[220px]">
+    <div class="relative">
+        <select
+            bind:value={selectedArtist}
+            on:change={handleSelect}
+            class="w-full appearance-none pl-4 pr-10 py-2 rounded-lg border border-slate-200 
+                bg-white text-slate-700
+                focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
+                disabled:bg-slate-50 disabled:cursor-wait
+                {error ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : ''}
+                transition-all duration-200"
+            disabled={loading}
+        >
+            <option value="">All Artists</option>
+            {#each artists as artist}
+                <option value={artist.name} class="py-1">
+                    {artist.name} ({artist.count} {artist.count === 1 ? 'artwork' : 'artworks'})
+                </option>
+            {/each}
+        </select>
+
+        <!-- Custom dropdown arrow -->
+        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            {#if loading}
+                <div class="w-4 h-4 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin"></div>
+            {:else}
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            {/if}
         </div>
-    {/if}
-    
-    <select
-        bind:value={selectedArtist}
-        on:change={handleSelect}
-        class="border px-2 py-1 rounded bg-white min-w-[200px] {error ? 'border-red-500' : ''}"
-        disabled={loading}
-    >
-        <option value="">All Artists</option>
-        {#each artists as artist}
-            <option value={artist.name}>
-                {artist.name} ({artist.count} {artist.count === 1 ? 'artwork' : 'artworks'})
-            </option>
-        {/each}
-    </select>
+    </div>
 
     {#if error}
-        <p class="text-red-500 text-sm mt-1">{error}</p>
+        <p class="absolute text-red-500 text-sm mt-1">
+            {error}
+        </p>
     {/if}
 </div> 
