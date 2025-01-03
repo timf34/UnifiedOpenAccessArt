@@ -76,76 +76,74 @@
     onMount(loadTimeRange);
 </script>
 
-<div class="w-full space-y-2">
-    <label class="block text-sm font-medium text-slate-700">Time Period</label>
+<div class="w-full">
+    <label class="block text-sm font-medium text-slate-700 mb-1">Time Period</label>
     
     {#if loading}
         <div class="h-[42px] flex items-center justify-center">
             <div class="w-6 h-6 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin"></div>
         </div>
     {:else}
-        <div class="space-y-4">
-            <!-- Start year -->
-            <div class="flex gap-4 items-start">
-                <div class="flex-1">
-                    <label class="block text-sm text-slate-600 mb-1">Start Year</label>
+        <div class="relative">
+            <div class="grid grid-cols-[1fr,auto,1fr] gap-2 items-center">
+                <!-- Start year with BCE -->
+                <div class="relative">
                     <input
                         type="number"
                         bind:value={selectedMin}
                         on:input={handleInput}
                         placeholder={formatPlaceholder('start')}
                         min="0"
-                        class="w-full pl-4 pr-4 py-2 rounded-lg border border-slate-200 
+                        class="w-full pl-4 pr-16 py-2 rounded-lg border border-slate-200 
                             bg-white text-slate-700
                             focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
                             placeholder-slate-400 transition-all duration-200
                             {error ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : ''}"
                     />
+                    <label class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-sm text-slate-600">
+                        <input
+                            type="checkbox"
+                            bind:checked={minIsBCE}
+                            on:change={handleInput}
+                            class="rounded border-slate-300 text-blue-500 focus:ring-blue-200 h-4 w-4"
+                        />
+                        BCE
+                    </label>
                 </div>
-                <label class="flex items-center gap-2 text-sm text-slate-600 pt-7">
-                    <input
-                        type="checkbox"
-                        bind:checked={minIsBCE}
-                        on:change={handleInput}
-                        class="rounded border-slate-300 text-blue-500 focus:ring-blue-200"
-                    />
-                    BCE
-                </label>
-            </div>
 
-            <!-- End year -->
-            <div class="flex gap-4 items-start">
-                <div class="flex-1">
-                    <label class="block text-sm text-slate-600 mb-1">End Year</label>
+                <span class="text-slate-400">to</span>
+
+                <!-- End year with BCE -->
+                <div class="relative">
                     <input
                         type="number"
                         bind:value={selectedMax}
                         on:input={handleInput}
                         placeholder={formatPlaceholder('end')}
                         min="0"
-                        class="w-full pl-4 pr-4 py-2 rounded-lg border border-slate-200 
+                        class="w-full pl-4 pr-16 py-2 rounded-lg border border-slate-200 
                             bg-white text-slate-700
                             focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
                             placeholder-slate-400 transition-all duration-200
                             {error ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : ''}"
                     />
+                    <label class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-sm text-slate-600">
+                        <input
+                            type="checkbox"
+                            bind:checked={maxIsBCE}
+                            on:change={handleInput}
+                            class="rounded border-slate-300 text-blue-500 focus:ring-blue-200 h-4 w-4"
+                        />
+                        BCE
+                    </label>
                 </div>
-                <label class="flex items-center gap-2 text-sm text-slate-600 pt-7">
-                    <input
-                        type="checkbox"
-                        bind:checked={maxIsBCE}
-                        on:change={handleInput}
-                        class="rounded border-slate-300 text-blue-500 focus:ring-blue-200"
-                    />
-                    BCE
-                </label>
             </div>
-        </div>
 
-        {#if error}
-            <p class="text-red-500 text-sm mt-1">
-                {error}
-            </p>
-        {/if}
+            {#if error}
+                <p class="absolute text-red-500 text-sm mt-1">
+                    {error}
+                </p>
+            {/if}
+        </div>
     {/if}
 </div> 
