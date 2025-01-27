@@ -1,4 +1,3 @@
-<!-- src/routes/artworks/[id]/+page.svelte -->
 <script lang="ts">
     export let data: { artwork: any };
     $: artwork = data?.artwork;
