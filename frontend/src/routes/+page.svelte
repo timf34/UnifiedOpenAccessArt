@@ -1,125 +1,144 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Gallery from '$lib/Gallery.svelte';
-	import FilterSelect from '$lib/FilterSelect.svelte';
-	import TimeRangeInput from '$lib/TimeRangeInput.svelte';
+    import { onMount } from 'svelte';
+    import Gallery from '$lib/Gallery.svelte';
+    import FilterSelect from '$lib/FilterSelect.svelte';
+    import TimeRangeInput from '$lib/TimeRangeInput.svelte';
+    import SearchToggle from '$lib/SearchToggle.svelte';
 
-	let artworks: any[] = [];
-	let total = 0;
-	let page = 1;
-	let limit = 20;
-	let search = '';
-	let selectedArtist = '';
-	let selectedMuseum = '';
-	let selectedMinYear: number | null = null;
-	let selectedMaxYear: number | null = null;
-	let selectedMinIsBCE = false;
-	let selectedMaxIsBCE = false;
+    let artworks: any[] = [];
+    let total = 0;
+    let page = 1;
+    let limit = 20;
+    let search = '';
+    let selectedArtist = '';
+    let selectedMuseum = '';
+    let selectedMinYear: number | null = null;
+    let selectedMaxYear: number | null = null;
+    let selectedMinIsBCE = false;
+    let selectedMaxIsBCE = false;
+    let useSemanticSearch = false;  // Added this line
 
-	let loading = false;
-	let errorMessage = '';
+    let loading = false;
+    let errorMessage = '';
 
-	const BASE_URL = 'http://127.0.0.1:8000';
+    const BASE_URL = 'http://127.0.0.1:8000';
 
-	async function loadData() {
-		loading = true;
-		errorMessage = '';
-		const searchTerms = [selectedArtist, selectedMuseum, search].filter(Boolean);
-		const searchTerm = searchTerms.join(' ');
-		
-		const params = new URLSearchParams({
-			search: searchTerm,
-			page: page.toString(),
-			limit: limit.toString()
-		});
+    async function loadData() {
+        loading = true;
+        errorMessage = '';
 
-		if (selectedMinYear !== null) {
-			params.append('min_year', selectedMinYear.toString());
-			params.append('min_is_bce', selectedMinIsBCE.toString());
-		}
-		if (selectedMaxYear !== null) {
-			params.append('max_year', selectedMaxYear.toString());
-			params.append('max_is_bce', selectedMaxIsBCE.toString());
-		}
+        try {
+            let url: string;
 
-		const url = `${BASE_URL}/api/artworks?${params.toString()}`;
+            if (useSemanticSearch && search.trim()) {
+                // Use semantic search if enabled and there's a search query
+                url = `${BASE_URL}/api/semantic-search?query=${encodeURIComponent(search)}&page=${page}&limit=${limit}`;
+            } else {
+                // Use regular search
+                const searchTerms = [selectedArtist, selectedMuseum, search].filter(Boolean);
+                const searchTerm = searchTerms.join(' ');
 
-		try {
-			const res = await fetch(url);
-			if (!res.ok) {
-				throw new Error(`Server responded with ${res.status} ${res.statusText}`);
-			}
-			const data = await res.json();
-			artworks = data.artworks;
-			total = data.total;
-		} catch (err: any) {
-			errorMessage = err.message;
-		} finally {
-			loading = false;
-		}
-	}
+                const params = new URLSearchParams({
+                    search: searchTerm,
+                    page: page.toString(),
+                    limit: limit.toString()
+                });
 
-	function handleTimeRangeChange(range: { 
-		min: number | null; 
-		max: number | null; 
-		min_is_bce: boolean;
-		max_is_bce: boolean;
-	}) {
-		selectedMinYear = range.min;
-		selectedMaxYear = range.max;
-		selectedMinIsBCE = range.min_is_bce;
-		selectedMaxIsBCE = range.max_is_bce;
-		page = 1;
-		loadData();
-	}
+                if (selectedMinYear !== null) {
+                    params.append('min_year', selectedMinYear.toString());
+                    params.append('min_is_bce', selectedMinIsBCE.toString());
+                }
+                if (selectedMaxYear !== null) {
+                    params.append('max_year', selectedMaxYear.toString());
+                    params.append('max_is_bce', selectedMaxIsBCE.toString());
+                }
 
-	function formatYear(year: number | null, isBCE: boolean): string {
-		if (year === null) return '';
-		return `${year} ${isBCE ? 'BCE' : 'CE'}`;
-	}
+                url = `${BASE_URL}/api/artworks?${params.toString()}`;
+            }
 
-	onMount(() => {
-		loadData();
-	});
+            const res = await fetch(url);
+            if (!res.ok) {
+                throw new Error(`Server responded with ${res.status} ${res.statusText}`);
+            }
+            const data = await res.json();
+            artworks = data.artworks;
+            total = data.total;
+        } catch (err: any) {
+            errorMessage = err.message;
+        } finally {
+            loading = false;
+        }
+    }
 
-	function nextPage() {
-		if (page * limit < total) {
-			page++;
-			loadData();
-		}
-	}
+    function handleSearchToggle(value: boolean) {
+        useSemanticSearch = value;
+        if (search.trim()) {
+            page = 1;
+            loadData();
+        }
+    }
 
-	function prevPage() {
-		if (page > 1) {
-			page--;
-			loadData();
-		}
-	}
+    function handleTimeRangeChange(range: {
+        min: number | null;
+        max: number | null;
+        min_is_bce: boolean;
+        max_is_bce: boolean;
+    }) {
+        selectedMinYear = range.min;
+        selectedMaxYear = range.max;
+        selectedMinIsBCE = range.min_is_bce;
+        selectedMaxIsBCE = range.max_is_bce;
+        page = 1;
+        loadData();
+    }
 
-	function handleSearch() {
-		selectedArtist = '';
-		selectedMuseum = '';
-		page = 1;
-		loadData();
-	}
+    function formatYear(year: number | null, isBCE: boolean): string {
+        if (year === null) return '';
+        return `${year} ${isBCE ? 'BCE' : 'CE'}`;
+    }
 
-	function handleFilterSelect(type: string, value: string) {
-		if (type !== 'artist') selectedArtist = '';
-		if (type !== 'museum') selectedMuseum = '';
-		
-		switch (type) {
-			case 'artist':
-				selectedArtist = value;
-				break;
-			case 'museum':
-				selectedMuseum = value;
-				break;
-		}
-		
-		search = '';
-		page = 1;
-		loadData();
-	}
+    function nextPage() {
+        if (page * limit < total) {
+            page++;
+            loadData();
+        }
+    }
+
+    function prevPage() {
+        if (page > 1) {
+            page--;
+            loadData();
+        }
+    }
+
+    function handleSearch() {
+        selectedArtist = '';
+        selectedMuseum = '';
+        page = 1;
+        loadData();
+    }
+
+    function handleFilterSelect(type: string, value: string) {
+        if (type !== 'artist') selectedArtist = '';
+        if (type !== 'museum') selectedMuseum = '';
+
+        switch (type) {
+            case 'artist':
+                selectedArtist = value;
+                break;
+            case 'museum':
+                selectedMuseum = value;
+                break;
+        }
+
+        search = '';
+        page = 1;
+        loadData();
+    }
+
+    onMount(() => {
+        loadData();
+    });
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-white">
@@ -153,30 +172,37 @@
 
 							<TimeRangeInput onRangeChange={handleTimeRangeChange} />
 
-							<div class="relative w-full lg:col-span-3">
-								<label class="block text-sm font-medium text-slate-700 mb-1">
-									Search
-								</label>
-								<div class="relative">
-									<input
-										type="text"
-										bind:value={search}
-										placeholder="Search artworks..."
-										class="w-full pl-4 pr-10 py-2 rounded-lg border border-slate-200 
-											focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
-											placeholder-slate-400 transition-all duration-200"
-									/>
-									<button
-										on:click={handleSearch}
-										class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md
-											text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
-									>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-										</svg>
-									</button>
-								</div>
-							</div>
+                            <div class="relative w-full lg:col-span-3">
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-sm font-medium text-slate-700">
+                                        Search
+                                    </label>
+                                    <SearchToggle
+                                            useSemanticSearch={useSemanticSearch}
+                                            onChange={handleSearchToggle}
+                                    />
+                                </div>
+                                <div class="relative">
+                                    <input
+                                            type="text"
+                                            bind:value={search}
+                                            placeholder="Search artworks..."
+                                            class="w-full pl-4 pr-10 py-2 rounded-lg border border-slate-200
+                focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
+                placeholder-slate-400 transition-all duration-200"
+                                    />
+                                    <button
+                                            on:click={handleSearch}
+                                            class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md
+                text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
 						</div>
 
 						<!-- Active filters -->

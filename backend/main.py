@@ -1,10 +1,13 @@
-# backend/main.py
+# Run with: uvicorn main:app --reload
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 from typing import List, Optional
 from pydantic import BaseModel
 
+from vector_search_api import VectorSearchAPI, SearchResult
+
+vector_search = VectorSearchAPI()
 app = FastAPI()
 
 # Configure CORS so SvelteKit (on different port) can access
@@ -287,3 +290,18 @@ def get_time_range():
     conn.close()
     
     return {"min_year": min_year, "max_year": max_year}
+
+@app.get("/api/semantic-search")
+def semantic_search(
+    query: str = Query(..., description="Search query"),
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+):
+    """
+    Search artworks using semantic vector similarity.
+    """
+    results, total = vector_search.search(query, page, limit)
+    return {
+        "total": total,
+        "artworks": results
+    }

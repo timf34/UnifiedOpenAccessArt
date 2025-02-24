@@ -68,4 +68,4 @@ class UnifiedArtwork(BaseModel):
     artist: Artist  # Artist information
     images: list[Image]  # List of images associated with the artwork
     web_url: Optional[HttpUrl]  # URL for viewing the artwork online
-    metadata: dict  # Store all additional metadata as a dictionary (headers as keys, values as values for CSV)
+    metadata: dict  # Store all additional metadata as a dictionary (headers as keys, values as values for CSV); data dump for semantic or full text search
