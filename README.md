@@ -1,5 +1,7 @@
 # UnifiedOpenAccessArt
 
+python clip_search.py --query "kids" 
+
 **Work very much in progress**
 
 Aggregating Open Access datasets from the world's top art museums into a unified repository.
