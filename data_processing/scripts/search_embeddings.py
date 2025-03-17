@@ -63,7 +63,7 @@ class CLIPSearcher:
             self.chroma_client = chromadb.PersistentClient(path=chroma_path)
             logger.info(f"Connected to ChromaDB at {chroma_path}")
             collections = self.chroma_client.list_collections()
-            logger.info(f"Available collections: {[c.name for c in collections]}")
+            logger.info(f"Available collections: {collections}")
         except Exception as e:
             logger.error(f"Error connecting to ChromaDB: {e}")
             raise
@@ -101,7 +101,7 @@ class CLIPSearcher:
             logger.info(f"Collection '{collection_name}' contains {collection.count()} items")
         except Exception as e:
             logger.error(f"Error getting collection '{collection_name}': {e}")
-            logger.info(f"Available collections: {[c.name for c in self.chroma_client.list_collections()]}")
+            logger.info(f"Available collections: {self.chroma_client.list_collections()}")
             return []
         
         # Query the collection

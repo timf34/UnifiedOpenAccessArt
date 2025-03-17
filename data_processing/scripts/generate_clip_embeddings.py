@@ -20,6 +20,7 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Optional, Tuple, Any
 import time
+import textwrap
 
 # Add the project root to the Python path
 project_root = Path(__file__).parent.parent.parent.absolute()
@@ -324,8 +325,8 @@ def process_artwork_batches(
             metadata = create_artwork_metadata(artwork)
             description = get_artwork_description(artwork)
             
-            # Add to upsert batch
-            upsert_ids.append(artwork_id)
+            # Add to upsert batch - Convert ID to string for ChromaDB
+            upsert_ids.append(str(artwork_id))
             upsert_embeddings.append(embedding)
             upsert_documents.append(description)
             upsert_metadatas.append(metadata)
@@ -354,15 +355,18 @@ def process_artwork_batches(
                         logger.exception(f"Error upserting batch to ChromaDB: {e}")
                         # Add these to failed embeddings
                         for j in range(len(upsert_ids)):
+                            # Get original ID (integer) from the string ID
+                            original_id = int(upsert_ids[j])
                             failed_embeddings.append({
-                                "id": upsert_ids[j],
+                                "id": original_id,
                                 "title": upsert_metadatas[j]["title"],
                                 "reason": f"ChromaDB upsert error: {str(e)}"
                             })
                         
                         # Remove from successful embeddings
+                        # Convert successful embedding IDs to strings for comparison
                         successful_embeddings = [s for s in successful_embeddings 
-                                               if s["id"] not in upsert_ids]
+                                               if str(s["id"]) not in upsert_ids]
                     
                     # Reset batch lists
                     upsert_ids = []
@@ -462,13 +466,35 @@ def main():
     # Save results to JSON
     import json
     
+    # Save detailed information to a text file
+    txt_output_file = f"{args.collection_name}_embedded_artworks.txt"
+    with open(txt_output_file, "w", encoding="utf-8") as f:
+        f.write(f"Successfully Embedded Artworks in Collection: {args.collection_name}\n")
+        f.write(f"Total: {len(successful)}\n")
+        f.write("=" * 80 + "\n\n")
+        
+        for i, artwork in enumerate(successful, 1):
+            f.write(f"{i}. ID: {artwork['id']}\n")
+            f.write(f"   Title: {artwork['title']}\n")
+            f.write(f"   Artist: {artwork['artist']}\n")
+            f.write(f"   Museum: {artwork['museum']}\n")
+            f.write(f"   Image URL: {artwork['image_url']}\n")
+            
+            # Add a separator between artworks
+            f.write("\n" + "-" * 80 + "\n\n")
+    
+    logger.info(f"Detailed artwork information saved to {txt_output_file}")
+    
     with open("successful_embeddings.json", "w") as f:
         json.dump(successful, f, indent=2)
     
     with open("failed_embeddings.json", "w") as f:
         json.dump(failed, f, indent=2)
     
-    logger.info("\nResults saved to successful_embeddings.json and failed_embeddings.json")
+    logger.info("\nResults saved to:")
+    logger.info(f"- successful_embeddings.json ({len(successful)} artworks)")
+    logger.info(f"- failed_embeddings.json ({len(failed)} artworks)")
+    logger.info(f"- {txt_output_file} (detailed information for querying)")
 
 
 if __name__ == "__main__":
