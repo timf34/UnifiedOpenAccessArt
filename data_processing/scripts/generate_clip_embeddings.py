@@ -2,7 +2,7 @@
 """
 Generate CLIP Embeddings for Museum Artworks
 
-This script loads artworks from Cleveland Museum of Art and CMOA datasets,
+This script loads artworks from available datasets,
 fetches their images, and creates CLIP embeddings stored in a vector database (ChromaDB).
 """
 
@@ -397,6 +397,8 @@ def main():
                         help="Force CPU usage even if GPU is available")
     parser.add_argument("--reset", action="store_true",
                         help="Reset existing collection in ChromaDB")
+    parser.add_argument("--datasets", nargs="+", type=str, default=None,
+                        help="Specific datasets to process (default: all available)")
     
     args = parser.parse_args()
     
@@ -423,20 +425,33 @@ def main():
     # Initialize dataset manager
     manager = DatasetManager(data_dir=args.data_dir)
     
-    # Load artworks from Cleveland Museum of Art and CMOA
-    logger.info("Loading artworks from Cleveland Museum of Art...")
-    start_time = time.time()
-    cleveland_artworks = manager.get_dataset("cleveland_art", limit=args.limit, with_images_only=True)
-    logger.info(f"Loaded {len(cleveland_artworks)} artworks from Cleveland Museum of Art in {time.time() - start_time:.2f}s")
+    # Get available datasets
+    available_datasets = manager.datasets
+    logger.info(f"Available datasets: {', '.join(available_datasets)}")
     
-    logger.info("Loading artworks from CMOA...")
-    start_time = time.time()
-    cmoa_artworks = manager.get_dataset("cmoa", limit=args.limit, with_images_only=True)
-    logger.info(f"Loaded {len(cmoa_artworks)} artworks from CMOA in {time.time() - start_time:.2f}s")
+    # Determine which datasets to process
+    datasets_to_process = args.datasets if args.datasets else available_datasets
     
-    # Combine artworks
-    all_artworks = cleveland_artworks + cmoa_artworks
+    # Load artworks from specified datasets
+    all_artworks = []
+    for dataset_name in datasets_to_process:
+        if dataset_name in available_datasets:
+            logger.info(f"Loading artworks from {dataset_name}...")
+            start_time = time.time()
+            try:
+                dataset_artworks = manager.get_dataset(dataset_name, limit=args.limit, with_images_only=True)
+                logger.info(f"Loaded {len(dataset_artworks)} artworks from {dataset_name} in {time.time() - start_time:.2f}s")
+                all_artworks.extend(dataset_artworks)
+            except Exception as e:
+                logger.error(f"Error loading dataset {dataset_name}: {e}")
+        else:
+            logger.warning(f"Dataset '{dataset_name}' not found. Skipping.")
+    
     logger.info(f"Total artworks to process: {len(all_artworks)}")
+    
+    if not all_artworks:
+        logger.error("No artworks found to process. Exiting.")
+        return
     
     # Initialize CLIP embedder
     embedder = CLIPEmbedder(use_gpu=not args.cpu)
