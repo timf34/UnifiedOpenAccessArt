@@ -137,9 +137,48 @@ class DatasetManager:
         
         def check_url(url):
             try:
-                # Just do a HEAD request to check accessibility
-                response = requests.head(url, timeout=timeout)
-                return url, response.status_code < 400, response.status_code
+                # Make a GET request with stream=True to only download headers and a small part of the content
+                response = requests.get(url, timeout=timeout, stream=True)
+                
+                # Check if status code indicates success
+                if response.status_code >= 400:
+                    return url, False, f"HTTP error: {response.status_code}"
+                
+                # Check Content-Type header to verify it's an image
+                content_type = response.headers.get('Content-Type', '')
+                if not content_type.startswith('image/'):
+                    return url, False, f"Not an image: {content_type}"
+                
+                # Download just the first few bytes to verify it's a valid image
+                # Most image formats have recognizable signatures in the first few bytes
+                content_start = next(response.iter_content(chunk_size=32), b'')
+                
+                # Check for common image format signatures
+                is_valid_image = False
+                
+                # JPEG starts with FF D8
+                if content_start.startswith(b'\xFF\xD8'):
+                    is_valid_image = True
+                # PNG starts with 89 50 4E 47 0D 0A 1A 0A
+                elif content_start.startswith(b'\x89PNG\r\n\x1a\n'):
+                    is_valid_image = True
+                # GIF starts with GIF87a or GIF89a
+                elif content_start.startswith(b'GIF87a') or content_start.startswith(b'GIF89a'):
+                    is_valid_image = True
+                # WebP starts with RIFF....WEBP
+                elif content_start.startswith(b'RIFF') and b'WEBP' in content_start:
+                    is_valid_image = True
+                # SVG is an XML file that should contain "<svg"
+                elif b'<svg' in content_start:
+                    is_valid_image = True
+                
+                if not is_valid_image:
+                    return url, False, "Invalid image format"
+                
+                # Close the response to free up resources
+                response.close()
+                
+                return url, True, response.status_code
             except Exception as e:
                 return url, False, str(e)
         
@@ -242,6 +281,45 @@ class DatasetManager:
             counts = f"{result['accessible_images']}/{result['total_images']}" if result['total_images'] > 0 else "0/0"
             status = result['status']
             print(f"{dataset_id:<25} | {rate:<10} | {counts:<12} | {status}")
+        
+        # Collect error types for a summary
+        error_categories = {
+            "HTTP error": 0,
+            "Not an image": 0,
+            "Invalid image format": 0,
+            "Connection error": 0,
+            "Timeout": 0,
+            "Other": 0
+        }
+        
+        print("\n=== ERROR SUMMARY ===")
+        for dataset_id, result in results.items():
+            for sample in result['samples']:
+                if not sample['accessible']:
+                    status = str(sample['status'])
+                    if status.startswith("HTTP error"):
+                        error_categories["HTTP error"] += 1
+                    elif status.startswith("Not an image"):
+                        error_categories["Not an image"] += 1
+                    elif status == "Invalid image format":
+                        error_categories["Invalid image format"] += 1
+                    elif "ConnectionError" in status or "ConnectTimeout" in status:
+                        error_categories["Connection error"] += 1
+                    elif "Timeout" in status:
+                        error_categories["Timeout"] += 1
+                    else:
+                        error_categories["Other"] += 1
+        
+        # Print error summary
+        total_errors = sum(error_categories.values())
+        if total_errors > 0:
+            print(f"Total errors: {total_errors}")
+            for category, count in error_categories.items():
+                if count > 0:
+                    percentage = (count / total_errors) * 100
+                    print(f"  - {category}: {count} ({percentage:.1f}%)")
+        else:
+            print("No errors found!")
             
         print("\n=== DETAILED SAMPLES ===")
         for dataset_id, result in results.items():
