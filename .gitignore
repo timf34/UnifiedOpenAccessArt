@@ -28,3 +28,4 @@ data/source_datasets/national_gallery_of_art_dc.csv
 data/processed_datasets/chroma_db
 data/sample_paintings 
 data/sample_paintings_db
+data/source_datasets
