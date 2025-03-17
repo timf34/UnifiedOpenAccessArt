@@ -6,7 +6,7 @@ import sys
 import os
 
 # Add the project root to the Python path
-project_root = Path(__file__).parent.parent.parent.absolute()
+project_root = Path(__file__).parent.parent.absolute()
 sys.path.append(str(project_root))
 
 from data_processing.processors.base_processor import BaseMuseumDataProcessor
@@ -33,7 +33,7 @@ class ProcessorRegistry:
 
     def _load_processors(self) -> None:
         """Automatically load all processor classes from the processors directory."""
-        processors_dir = Path(__file__).parent
+        processors_dir = Path(__file__).parent / "processors"
         logger.debug(f"Looking for processors in directory: {processors_dir}")
 
         # Skip certain files
@@ -111,5 +111,4 @@ class ProcessorRegistry:
 
 if __name__ == "__main__":
     registry = ProcessorRegistry()
-    print(registry.supported_museums)
-    
+    print(registry.supported_museums) 

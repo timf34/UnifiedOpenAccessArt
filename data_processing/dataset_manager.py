@@ -12,7 +12,7 @@ import sys
 project_root = Path(__file__).parent.parent.absolute()
 sys.path.append(str(project_root))
 
-from data_processing.processors.registry import ProcessorRegistry
+from data_processing.registry import ProcessorRegistry
 from models.data_models import UnifiedArtwork
 
 class DatasetManager:
