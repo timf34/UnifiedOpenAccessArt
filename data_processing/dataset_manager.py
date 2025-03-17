@@ -257,3 +257,63 @@ class DatasetManager:
                 if not sample['accessible']:
                     print(f"     Error: {sample['status']}")
                 print()
+                
+    def get_dataset_statistics(self, dataset_id: Optional[str] = None) -> Dict:
+        """
+        Get statistics about the number of objects in each dataset.
+        
+        Args:
+            dataset_id: Specific dataset to check (None for all)
+            
+        Returns:
+            Dict with statistics for each dataset
+        """
+        results = {}
+        datasets_to_check = [dataset_id] if dataset_id else self.datasets
+        
+        for dataset_id in tqdm(datasets_to_check, desc="Processing datasets"):
+            try:
+                print(f"\nCounting objects in {dataset_id}...")
+                
+                # Get file path and processor
+                file_pattern = self.registry.get_source_file_pattern(dataset_id)
+                if not file_pattern:
+                    results[dataset_id] = {
+                        "status": "No file pattern defined",
+                        "total_objects": 0,
+                        "objects_with_images": 0
+                    }
+                    continue
+                    
+                file_path = self.data_dir / file_pattern
+                if not file_path.exists():
+                    results[dataset_id] = {
+                        "status": "File not found",
+                        "total_objects": 0,
+                        "objects_with_images": 0
+                    }
+                    continue
+                
+                # Process the dataset
+                processor = self.registry.get_processor(dataset_id)
+                artworks = processor.get_unified_data(str(file_path))
+                
+                # Count objects with images
+                objects_with_images = sum(1 for a in artworks if a.images and len(a.images) > 0 and a.images[0].url)
+                
+                results[dataset_id] = {
+                    "status": "OK",
+                    "total_objects": len(artworks),
+                    "objects_with_images": objects_with_images,
+                    "image_rate": (objects_with_images / len(artworks)) * 100 if artworks else 0
+                }
+                
+            except Exception as e:
+                results[dataset_id] = {
+                    "status": f"Error: {str(e)}",
+                    "total_objects": 0,
+                    "objects_with_images": 0,
+                    "image_rate": 0
+                }
+                
+        return results
