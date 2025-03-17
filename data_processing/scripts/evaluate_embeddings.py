@@ -29,8 +29,8 @@ sys.path.append(str(project_root))
 # Configuration
 CHROMA_PATH = str(project_root / "data" / "processed_datasets" / "chroma_db")
 MODEL_NAME = "openai/clip-vit-base-patch32"
-DEFAULT_COLLECTION = "artwork_images"
-DEFAULT_TOP_K = 20
+DEFAULT_COLLECTION = "prod_artwork_images"
+DEFAULT_TOP_K = 100
 
 # Configure logging
 logging.basicConfig(
