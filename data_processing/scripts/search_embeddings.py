@@ -19,6 +19,7 @@ from PIL import Image
 import requests
 from io import BytesIO
 import time
+import readline  # For better command line input experience
 
 # Add the project root to the Python path
 project_root = Path(__file__).parent.parent.parent.absolute()
@@ -247,13 +248,161 @@ class CLIPSearcher:
         
         plt.tight_layout()
         plt.subplots_adjust(top=0.9)  # Make room for the suptitle
-        plt.show()
+        plt.show(block=False)  # Non-blocking to allow continued interaction
+
+
+def interactive_cli(searcher, collection_name, top_k, show_images, save_results_path=None):
+    """Run an interactive CLI for searching artworks."""
+    print("\n" + "=" * 80)
+    print("Interactive Artwork Search CLI")
+    print("=" * 80)
+    print("Type your search query and press Enter.")
+    print("Type 'help' for available commands.")
+    print("Type 'exit' or 'quit' to exit.")
+    print("=" * 80)
+    
+    history = []
+    
+    while True:
+        try:
+            # Get user input
+            user_input = input("\nSearch query> ").strip()
+            
+            # Process commands
+            if user_input.lower() in ['exit', 'quit', 'q']:
+                print("Exiting...")
+                break
+                
+            elif user_input.lower() in ['help', '?', 'h']:
+                print("\nAvailable commands:")
+                print("  help, ?, h       - Show this help message")
+                print("  exit, quit, q    - Exit the program")
+                print("  clear, cls       - Clear the screen")
+                print(f"  top N            - Change number of results (current: {top_k})")
+                print("  history          - Show search history")
+                print("  save FILENAME    - Save last results to JSON file")
+                print("  collections      - List available collections")
+                print(f"  collection NAME  - Change collection (current: {collection_name})")
+                print("  images on/off    - Turn image display on/off")
+                print("  Any other input will be treated as a search query")
+                
+            elif user_input.lower() in ['clear', 'cls']:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                
+            elif user_input.lower().startswith('top '):
+                try:
+                    new_top_k = int(user_input.split()[1])
+                    if new_top_k > 0:
+                        top_k = new_top_k
+                        print(f"Number of results changed to {top_k}")
+                    else:
+                        print("Number of results must be positive")
+                except (IndexError, ValueError):
+                    print("Invalid format. Use 'top N' where N is a positive integer.")
+                    
+            elif user_input.lower() == 'history':
+                if not history:
+                    print("No search history yet.")
+                else:
+                    print("\nSearch history:")
+                    for i, query in enumerate(history, 1):
+                        print(f"{i}. {query}")
+                        
+            elif user_input.lower().startswith('save '):
+                if not history:
+                    print("No search results to save.")
+                    continue
+                    
+                try:
+                    filename = user_input[5:].strip()
+                    if not filename:
+                        if save_results_path:
+                            filename = save_results_path
+                        else:
+                            print("Please specify a filename.")
+                            continue
+                            
+                    # Get last results and save them
+                    if 'last_results' in locals():
+                        import json
+                        with open(filename, 'w') as f:
+                            json.dump(last_results, f, indent=2)
+                        print(f"Results saved to {filename}")
+                    else:
+                        print("No results available to save.")
+                except Exception as e:
+                    print(f"Error saving results: {e}")
+                    
+            elif user_input.lower() == 'collections':
+                try:
+                    collections = searcher.chroma_client.list_collections()
+                    print("\nAvailable collections:")
+                    for i, coll in enumerate(collections, 1):
+                        print(f"{i}. {coll.name}")
+                except Exception as e:
+                    print(f"Error listing collections: {e}")
+                    
+            elif user_input.lower().startswith('collection '):
+                try:
+                    new_collection = user_input[11:].strip()
+                    # Verify collection exists
+                    collections = [c.name for c in searcher.chroma_client.list_collections()]
+                    if new_collection in collections:
+                        collection_name = new_collection
+                        print(f"Collection changed to '{collection_name}'")
+                    else:
+                        print(f"Collection '{new_collection}' not found. Available collections:")
+                        for c in collections:
+                            print(f"  - {c}")
+                except Exception as e:
+                    print(f"Error changing collection: {e}")
+                    
+            elif user_input.lower() in ['images on', 'images off']:
+                show_images = user_input.lower() == 'images on'
+                print(f"Image display turned {'on' if show_images else 'off'}")
+                
+            elif user_input.strip():
+                # Treat as search query
+                try:
+                    # Close any existing plot windows
+                    plt.close('all')
+                    
+                    # Perform search
+                    results = searcher.search(
+                        query=user_input,
+                        collection_name=collection_name,
+                        top_k=top_k
+                    )
+                    
+                    # Store results for potential saving
+                    last_results = results
+                    
+                    # Display results
+                    searcher.display_results(user_input, results, show_images=show_images)
+                    
+                    # Add to history
+                    history.append(user_input)
+                    
+                except Exception as e:
+                    logger.exception(f"Error during search: {e}")
+                    print(f"Error: {str(e)}")
+            
+        except KeyboardInterrupt:
+            print("\nExiting...")
+            break
+        except EOFError:
+            print("\nExiting...")
+            break
+        except Exception as e:
+            print(f"Error: {str(e)}")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Search for artworks using natural language")
-    parser.add_argument("--query", type=str, required=True,
-                        help="Natural language query to search for artworks")
+    parser.add_argument("--query", type=str, 
+                        help="Natural language query to search for artworks (optional in interactive mode)")
+    parser.add_argument("--interactive", "-i", action="store_true",
+                        help="Run in interactive mode")
     parser.add_argument("--chroma_path", type=str, default=CHROMA_PATH,
                         help=f"Path to ChromaDB embeddings (default: {CHROMA_PATH})")
     parser.add_argument("--collection_name", type=str, default="artwork_images",
@@ -269,6 +418,11 @@ def main():
     
     args = parser.parse_args()
     
+    # If no query is provided, default to interactive mode
+    if not args.query and not args.interactive:
+        args.interactive = True
+        print("No query provided, defaulting to interactive mode.")
+    
     try:
         # Initialize searcher
         searcher = CLIPSearcher(
@@ -276,22 +430,32 @@ def main():
             use_gpu=not args.cpu
         )
         
-        # Search for artworks
-        results = searcher.search(
-            query=args.query,
-            collection_name=args.collection_name,
-            top_k=args.top_k
-        )
-        
-        # Display results
-        searcher.display_results(args.query, results, show_images=not args.no_images)
-        
-        # Save results if requested
-        if args.save_results and results:
-            import json
-            with open(args.save_results, 'w') as f:
-                json.dump(results, f, indent=2)
-            logger.info(f"Results saved to {args.save_results}")
+        if args.interactive:
+            # Run interactive CLI
+            interactive_cli(
+                searcher=searcher,
+                collection_name=args.collection_name,
+                top_k=args.top_k,
+                show_images=not args.no_images,
+                save_results_path=args.save_results
+            )
+        else:
+            # Single search mode
+            results = searcher.search(
+                query=args.query,
+                collection_name=args.collection_name,
+                top_k=args.top_k
+            )
+            
+            # Display results
+            searcher.display_results(args.query, results, show_images=not args.no_images)
+            
+            # Save results if requested
+            if args.save_results and results:
+                import json
+                with open(args.save_results, 'w') as f:
+                    json.dump(results, f, indent=2)
+                logger.info(f"Results saved to {args.save_results}")
             
     except Exception as e:
         logger.exception(f"Error during search: {e}")
