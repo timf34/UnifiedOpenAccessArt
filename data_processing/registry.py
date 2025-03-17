@@ -24,7 +24,7 @@ class ProcessorRegistry:
         'cleveland_art': 'cleveland_museum_of_art.csv',
         # 'moma': 'moma.csv',
         # 'national_gallery_art_dc': 'national_gallery_of_art_dc.csv',
-        'cmoa': 'cmoa.csv',
+        # 'cmoa': 'cmoa.csv',
     }
 
     def __init__(self):
