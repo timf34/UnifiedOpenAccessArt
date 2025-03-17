@@ -2,6 +2,13 @@ import logging
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional, Set
 import pandas as pd
+import sys
+import os
+from pathlib import Path
+
+# Add the project root to the Python path
+project_root = str(Path(__file__).parent.parent.parent)
+sys.path.append(project_root)
 
 from models.data_models import (
     UnifiedArtwork,
@@ -76,7 +83,7 @@ class BaseMuseumDataProcessor(ABC):
         """
         Create a UnifiedArtwork from a single row using column_map, plus fallback logic.
         """
-        # Start with a new instance (we’ll fill it in piecewise)
+        # Start with a new instance (we'll fill it in piecewise)
         artwork = UnifiedArtwork(
             id="",
             museum=Museum(name=self.get_museum_name()),

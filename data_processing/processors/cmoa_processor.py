@@ -6,8 +6,14 @@ Here was the ChatGPT chat URL: https://chatgpt.com/c/676f8192-6fc8-8012-9d3b-03b
 import pandas as pd
 import re
 from typing import Any, Optional
+import sys
+from pathlib import Path
 
-from processors.base_processor import BaseMuseumDataProcessor
+# Add the project root to the Python path
+project_root = Path(__file__).parent.parent.parent.absolute()
+sys.path.append(str(project_root))
+
+from data_processing.processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import (
     DateInfo,
     DateType,
@@ -47,7 +53,7 @@ def parse_cmoa_date(raw_val: Any, row: pd.Series) -> DateInfo:
       2) Else, treat it as a range between earliest and latest years.
       3) If unparseable, fallback to UNKNOWN.
 
-    We’re ignoring BCE in this example, but you can enhance if needed.
+    We're ignoring BCE in this example, but you can enhance if needed.
     """
     date_text = str(raw_val).strip()
     earliest = str(row.get("creation_date_earliest", "")).strip()
@@ -127,7 +133,7 @@ def parse_cmoa_artist(raw_val: Any, row: pd.Series) -> Artist:
       - full_name (string)
       - birth_date / death_date (like '01/01/1947')
 
-    We’ll extract the 4-digit year from those date strings for birth_year and death_year.
+    We'll extract the 4-digit year from those date strings for birth_year and death_year.
     If parsing fails or columns are missing, fall back to defaults.
     """
     full_name = str(row.get("full_name", "Unknown Artist")).strip()
@@ -176,7 +182,7 @@ class CarnegieMuseumDataProcessor(BaseMuseumDataProcessor):
         "image_url": {"parse": parse_cmoa_images, "model": "images"},
         # Artist
         "full_name": {"parse": parse_cmoa_artist, "model": "artist"},
-        # Use the museum’s web_url for artwork display
+        # Use the museum's web_url for artwork display
         "web_url": {"model": "web_url"},
     }
 

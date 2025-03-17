@@ -1,8 +1,14 @@
 import pandas as pd
 import re
 from typing import Any, Optional, List
+import sys
+from pathlib import Path
 
-from processors.base_processor import BaseMuseumDataProcessor
+# Add the project root to the Python path
+project_root = Path(__file__).parent.parent.parent.absolute()
+sys.path.append(str(project_root))
+
+from data_processing.processors.base_processor import BaseMuseumDataProcessor
 from models.data_models import (
     DateInfo,
     DateType,

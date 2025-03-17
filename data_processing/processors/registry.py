@@ -2,8 +2,17 @@ from typing import Dict, Optional
 from pathlib import Path
 import importlib
 import logging
-from processors.base_processor import BaseMuseumDataProcessor
+import sys
+import os
 
+# Add the project root to the Python path
+project_root = Path(__file__).parent.parent.parent.absolute()
+sys.path.append(str(project_root))
+
+from data_processing.processors.base_processor import BaseMuseumDataProcessor
+
+# Configure logging to show debug messages
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
@@ -25,6 +34,7 @@ class ProcessorRegistry:
     def _load_processors(self) -> None:
         """Automatically load all processor classes from the processors directory."""
         processors_dir = Path(__file__).parent
+        logger.debug(f"Looking for processors in directory: {processors_dir}")
 
         # Skip certain files
         skip_files = {'__init__.py', 'base_processor.py', 'registry.py'}
@@ -32,19 +42,22 @@ class ProcessorRegistry:
         # Find all Python files in the processors directory
         processor_files = [f for f in processors_dir.glob("*_processor.py")
                            if f.name not in skip_files]
+        logger.debug(f"Found processor files: {[f.name for f in processor_files]}")
 
         for file_path in processor_files:
             try:
                 # Get the module name without '_processor.py'
                 museum_name = file_path.stem.replace('_processor', '')
+                logger.debug(f"Processing museum: {museum_name}")
 
                 # Skip if we don't have a file mapping for this processor
                 if museum_name not in self.FILE_MAPPINGS:
                     logger.warning(f"No file mapping found for {museum_name}, skipping")
                     continue
 
-                # Import the module
-                module_name = f"processors.{file_path.stem}"
+                # Import the module using absolute path
+                module_name = f"data_processing.processors.{file_path.stem}"
+                logger.debug(f"Importing module: {module_name}")
                 module = importlib.import_module(module_name)
 
                 # Find processor class in the module
@@ -55,6 +68,7 @@ class ProcessorRegistry:
                             issubclass(attr, BaseMuseumDataProcessor) and
                             attr != BaseMuseumDataProcessor):
                         processor_class = attr
+                        logger.debug(f"Found processor class: {attr.__name__}")
                         break
 
                 if processor_class is None:
@@ -68,6 +82,8 @@ class ProcessorRegistry:
 
             except Exception as e:
                 logger.error(f"Error loading processor from {file_path}: {str(e)}")
+                import traceback
+                logger.error(traceback.format_exc())
 
     def get_processor(self, museum_name: str) -> Optional[BaseMuseumDataProcessor]:
         """Get a processor by museum name."""
