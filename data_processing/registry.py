@@ -22,8 +22,8 @@ class ProcessorRegistry:
     # Mapping of processor module names to their source file patterns
     FILE_MAPPINGS = {
         'cleveland_art': 'cleveland_museum_of_art.csv',
-        'moma': 'moma.csv',
-        'national_gallery_art_dc': 'national_gallery_of_art_dc.csv',
+        # 'moma': 'moma.csv',
+        # 'national_gallery_art_dc': 'national_gallery_of_art_dc.csv',
         'cmoa': 'cmoa.csv',
     }
 
