@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import umap  # Install via: pip install umap-learn
 import chromadb
 from pathlib import Path
+from sklearn.metrics import silhouette_score
 
 # Add project root to sys.path if needed
 project_root = Path(__file__).parent.parent.parent.absolute()
@@ -67,31 +68,18 @@ def reduce_dimensions(embeddings, n_components=2, random_state=42):
     embedding_2d = reducer.fit_transform(embeddings)
     return embedding_2d
 
-def plot_embeddings(embedding_2d, metadatas, title_field="title", color_field=None, save_path=None):
+def plot_embeddings(embedding_2d, metadatas, title_field="title", save_path=None):
     """
     Create a scatter plot of the 2D embeddings.
     
     - title_field: key in metadata to use for annotating points.
-    - color_field: key in metadata to use for coloring points (optional).
     """
     plt.figure(figsize=(12, 8))
     x = embedding_2d[:, 0]
     y = embedding_2d[:, 1]
     
-    if color_field:
-        # If a color field is provided, convert to categorical numerical labels
-        labels = [md.get(color_field, "Unknown") for md in metadatas]
-        unique_labels = list(set(labels))
-        color_map = {label: idx for idx, label in enumerate(unique_labels)}
-        colors = [color_map[label] for label in labels]
-        scatter = plt.scatter(x, y, c=colors, cmap='tab10', alpha=0.7)
-        plt.colorbar(scatter, ticks=range(len(unique_labels)), label=color_field)
-        # Create a legend manually
-        for label, idx in color_map.items():
-            plt.scatter([], [], c=scatter.cmap(scatter.norm(idx)), label=label)
-        plt.legend(title=color_field)
-    else:
-        plt.scatter(x, y, alpha=0.7)
+    # Simple scatter plot with a single color
+    plt.scatter(x, y, alpha=0.7, color='#1f77b4')  # Use a nice blue color
     
     # Optionally, annotate a few points (if not too many)
     for i, md in enumerate(metadatas):
@@ -111,6 +99,44 @@ def plot_embeddings(embedding_2d, metadatas, title_field="title", color_field=No
     
     plt.show()
 
+def calculate_silhouette_scores(embedding_2d, metadatas, group_fields=["style", "medium", "time_period"]):
+    """
+    Calculate silhouette scores for multiple metadata groupings.
+    
+    Args:
+        embedding_2d: The 2D UMAP embeddings
+        metadatas: List of metadata dictionaries
+        group_fields: List of metadata fields to use for grouping
+    
+    Returns:
+        dict: Dictionary of field -> silhouette score
+    """
+    scores = {}
+    
+    for field in group_fields:
+        # Extract labels from metadata
+        labels = [md.get(field, "Unknown") for md in metadatas]
+        
+        # Convert labels to numerical values
+        unique_labels = list(set(labels))
+        
+        # Only calculate score if we have at least 2 different labels
+        if len(unique_labels) >= 2:
+            label_to_num = {label: idx for idx, label in enumerate(unique_labels)}
+            numerical_labels = [label_to_num[label] for label in labels]
+            
+            try:
+                score = silhouette_score(embedding_2d, numerical_labels)
+                scores[field] = score
+                print(f"Silhouette Score for {field}: {score:.3f}")
+                print(f"Number of unique {field}s: {len(unique_labels)}")
+            except Exception as e:
+                print(f"Could not calculate silhouette score for {field}: {e}")
+        else:
+            print(f"Not enough unique values for {field} to calculate silhouette score")
+    
+    return scores
+
 def main():
     # Load embeddings and metadata from ChromaDB
     print("Loading embeddings from ChromaDB...")
@@ -122,7 +148,7 @@ def main():
         return
     
     # Optionally, take a sample if too many points (e.g., sample 1000 points)
-    sample_size = 10000
+    sample_size = 1000
     if len(embeddings) > sample_size:
         indices = np.random.choice(len(embeddings), size=sample_size, replace=False)
         embeddings = embeddings[indices]
@@ -133,10 +159,13 @@ def main():
     print("Reducing dimensionality with UMAP...")
     embedding_2d = reduce_dimensions(embeddings, n_components=2)
     
+    # Calculate silhouette scores for different groupings
+    print("\nCalculating silhouette scores across different metadata fields...")
+    scores = calculate_silhouette_scores(embedding_2d, metadatas)
+    
     # Plot the results
-    print("Plotting embeddings...")
-    # For example, annotate by artwork title and color by museum (if available)
-    plot_embeddings(embedding_2d, metadatas, title_field="title", color_field="museum", save_path="embeddings_plot.png")
+    print("\nPlotting embeddings...")
+    plot_embeddings(embedding_2d, metadatas, title_field="title", save_path="embeddings_plot.png")
 
 if __name__ == "__main__":
     main()
