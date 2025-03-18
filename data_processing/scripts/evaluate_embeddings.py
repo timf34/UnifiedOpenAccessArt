@@ -30,7 +30,7 @@ sys.path.append(str(project_root))
 CHROMA_PATH = str(project_root / "data" / "processed_datasets" / "chroma_db")
 MODEL_NAME = "openai/clip-vit-base-patch32"
 DEFAULT_COLLECTION = "prod_artwork_images"
-DEFAULT_TOP_K = 100
+DEFAULT_TOP_K = 50
 
 # Configure logging
 logging.basicConfig(
@@ -286,42 +286,42 @@ RETRIEVAL_CONSISTENCY_QUERY_SETS = {
         "artwork showing sunset",
         "landscape with setting sun"
     ],
-    "portrait": [
-        "portrait painting", 
-        "face portrait", 
-        "portrait of a person",
-        "formal portrait artwork"
+    "portrait of a man": [
+        "portrait of a man",
+        "gentleman portrait",
+        "man portrait",
+        "painting of person who is male and is a portrait"
     ],
-    "landscape": [
-        "landscape painting", 
-        "natural landscape", 
-        "countryside scene",
-        "scenic view artwork"
+    "roses painting": [
+        "roses painting",
+        "painting with roses",
+        "painting of roses",
+        "roses painted using paint",
+        "flowers that are roses in a painting"
+
     ],
-    "still_life": [
-        "still life painting", 
-        "fruit bowl artwork", 
-        "floral arrangement painting",
-        "table with objects"
-    ],
-    "religious": [
-        "religious artwork", 
-        "biblical scene", 
-        "christian iconography",
-        "religious figure painting"
-    ],
-    "medieval": [
-        "medieval artwork", 
-        "medieval manuscript", 
-        "gothic art",
-        "early christian art"
+    "virgin and child": [
+        "virgin and child painting",
+        "virgin and child artwork",
+        "virgin and child scene",
+        "virgin and child depicted in a painting"
+        "the madonna with her baby",
+        "madonna and child"
     ],
     "blue_vase": [
         "blue porcelain vase", 
-        "blue glazed container", 
         "blue ceramic vase",
-        "blue pottery vessel"
+        "blue pottery vessel",
+        "vase that is blue",
+        "vase like container that is blue"
     ],
+    "islamic textiles": [
+        "islamic textile",
+        "textile with islamic motifs",
+        "islamic pattern design",
+        "textile with islamic symbols"
+    ],
+    
     "van gogh": [
         "van gogh painting",
         "painting in the style of van gogh",
